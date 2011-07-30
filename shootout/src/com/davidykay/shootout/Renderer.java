@@ -225,12 +225,24 @@ public class Renderer {
 
   private void setProjectionAndCameraAugmentedReality(Graphics graphics, Simulation simulation, Application app) {
 
+    //camera.position.set(0, 6, 2);
+    //camera.direction.set(0, 0, -4).sub(camera.position).nor();
+
+    //camera.rotate(simulation.getPitch()   , 1 , 0 , 0);
+    //camera.rotate(simulation.getRoll()    , 0 , 1 , 0);
+    //camera.rotate(simulation.getAzimuth() , 0 , 0 , 1);
+
+    // Note that these are taken from StackOverflow:
+    // http://stackoverflow.com/questions/5274514/how-do-i-use-the-android-compass-orientation-to-aim-an-opengl-camera
     camera.position.set(0, 6, 2);
-    camera.direction.set(0, 0, -4).sub(camera.position).nor();
-    //camera.direction.set(0, 0, 0);
-    camera.rotate(simulation.getPitch()   , 1 , 0 , 0);
-    camera.rotate(simulation.getRoll()    , 0 , 1 , 0);
-    camera.rotate(simulation.getAzimuth() , 0 , 0 , 1);
+    camera.direction.set(0, 0, 1);
+    camera.up.set(0, 1, 0);
+
+    camera.rotate(simulation.getAzimuth() , 0 , 1 , 0);
+    Vector3 pivot = camera.direction.cpy().crs(camera.up);
+
+    camera.rotate(simulation.getPitch(), pivot.x, pivot.y, pivot.z);
+    camera.rotate(simulation.getRoll(), camera.direction.x, camera.direction.y, camera.direction.z);
 
     camera.update();
     camera.apply(Gdx.gl10);

@@ -268,18 +268,25 @@ public class Simulation {
   private float mAzimuth;
   private float mPitch  ;
   private float mRoll   ;
+//  private float mYaw;
   public void setOrientation(
       float azimuth ,
       float pitch   ,
       float roll
       ) {
-      mAzimuth = azimuth;
-      mPitch   = pitch;
-      mRoll    = roll;
+      //mAzimuth = azimuth;
+      //mPitch   = pitch;
+      //mRoll    = roll;
+
+      // Note that these are taken from StackOverflow:
+      // http://stackoverflow.com/questions/5274514/how-do-i-use-the-android-compass-orientation-to-aim-an-opengl-camera
+      mAzimuth = -azimuth;
+      mPitch   = -roll - 90;
+      mRoll    = -pitch;
       Gdx.app.log(TAG, String.format("Orientation: (%f, %f, %f)",
-                                     roll,
-                                     pitch,
-                                     azimuth));
+                                     mRoll,
+                                     mPitch,
+                                     mAzimuth));
   }
   public float getAzimuth() {
     return mAzimuth;
@@ -290,4 +297,14 @@ public class Simulation {
   public float getRoll() {
     return mRoll;
   }
+
+  //public class Player {
+  //  //public final Vector3 position = new Vector3(0,1.5f,0);
+  //  /** Angle left or right of the vertical */
+  //  public float yaw = 0.0f;
+  //  /** Angle above or below the horizon */
+  //  public float pitch = 0.0f;
+  //  /** Angle about the direction as defined by yaw and pitch */
+  //  public float roll = 0.0f;
+  //}
 }

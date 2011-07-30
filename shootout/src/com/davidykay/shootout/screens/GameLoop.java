@@ -108,7 +108,7 @@ public class GameLoop implements Screen, SimulationListener {
       /** Vector tracing between the near plane and the far plane **/
       Vector3 inVector = new Vector3(nearVector);
 
-      final Plane originPlane = new Plane(
+      final Plane gamePlane = new Plane(
           new Vector3(0, 0, 0),
           new Vector3(1, 0, 0),
           new Vector3(0, 0, 1)
@@ -123,7 +123,7 @@ public class GameLoop implements Screen, SimulationListener {
       Vector3 finalVector;
       if (Intersector.intersectRayPlane(
           pickRay,
-          originPlane,
+          gamePlane,
           intersection)
          ) {
         finalVector = new Vector3(intersection);
