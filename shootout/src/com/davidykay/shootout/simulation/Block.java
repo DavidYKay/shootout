@@ -11,25 +11,16 @@
  * governing permissions and limitations under the License.
  */
 
-package com.badlogic.gdxinvaders.simulation;
+package com.davidykay.shootout.simulation;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class Ship {
-	public static final float SHIP_RADIUS = 1;
-	public static final float SHIP_VELOCITY = 20;
-	public final Vector3 position = new Vector3(0, 0, 0);
-	public int lives = 3;
-	public boolean isExploding = false;
-	public float explodeTime = 0;
+public class Block {
+	public final static float BLOCK_RADIUS = 0.5f;
 
-	public void update (float delta) {
-		if (isExploding) {
-			explodeTime += delta;
-			if (explodeTime > Explosion.EXPLOSION_LIVE_TIME) {
-				isExploding = false;
-				explodeTime = 0;
-			}
-		}
+	public Vector3 position = new Vector3();
+
+	public Block (Vector3 position) {
+		this.position.set(position);
 	}
 }

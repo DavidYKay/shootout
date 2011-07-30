@@ -11,16 +11,20 @@
  * governing permissions and limitations under the License.
  */
 
-package com.badlogic.gdxinvaders.simulation;
+package com.davidykay.shootout.simulation;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class Block {
-	public final static float BLOCK_RADIUS = 0.5f;
+public class Explosion {
+	public static final float EXPLOSION_LIVE_TIME = 1;
+	public float aliveTime = 0;
+	public final Vector3 position = new Vector3();
 
-	public Vector3 position = new Vector3();
-
-	public Block (Vector3 position) {
+	public Explosion (Vector3 position) {
 		this.position.set(position);
+	}
+
+	public void update (float delta) {
+		aliveTime += delta;
 	}
 }

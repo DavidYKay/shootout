@@ -11,20 +11,28 @@
  * governing permissions and limitations under the License.
  */
 
-package com.badlogic.gdxinvaders.simulation;
+package com.davidykay.shootout.simulation;
 
 import com.badlogic.gdx.math.Vector3;
 
-public class Explosion {
-	public static final float EXPLOSION_LIVE_TIME = 1;
-	public float aliveTime = 0;
+public class Shot {
+	public static float SHOT_VELOCITY = 10;
 	public final Vector3 position = new Vector3();
+	public boolean isInvaderShot;
+	public boolean hasLeftField = false;
 
-	public Explosion (Vector3 position) {
+	public Shot (Vector3 position, boolean isInvaderShot) {
 		this.position.set(position);
+		this.isInvaderShot = isInvaderShot;
 	}
 
 	public void update (float delta) {
-		aliveTime += delta;
+		if (isInvaderShot)
+			position.z += SHOT_VELOCITY * delta;
+		else
+			position.z -= SHOT_VELOCITY * delta;
+
+		if (position.z > Simulation.PLAYFIELD_MAX_Z) hasLeftField = true;
+		if (position.z < Simulation.PLAYFIELD_MIN_Z) hasLeftField = true;
 	}
 }

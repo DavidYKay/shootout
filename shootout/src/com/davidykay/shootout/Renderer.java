@@ -2,12 +2,12 @@ package com.davidykay.shootout;
 
 /*
  * Copyright 2010 Mario Zechner (contact@badlogicgames.com), Nathan Sweet (admin@esotericsoftware.com)
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the
  * License. You may obtain a copy of the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS"
  * BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
@@ -33,17 +33,17 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.loaders.ModelLoaderOld;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdxinvaders.simulation.Block;
-import com.badlogic.gdxinvaders.simulation.Explosion;
-import com.badlogic.gdxinvaders.simulation.Invader;
-import com.badlogic.gdxinvaders.simulation.Ship;
-import com.badlogic.gdxinvaders.simulation.Shot;
-import com.badlogic.gdxinvaders.simulation.Simulation;
+import com.davidykay.shootout.simulation.Block;
+import com.davidykay.shootout.simulation.Explosion;
+import com.davidykay.shootout.simulation.Invader;
+import com.davidykay.shootout.simulation.Ship;
+import com.davidykay.shootout.simulation.Shot;
+import com.davidykay.shootout.simulation.Simulation;
 
 /**
  * The renderer receives a simulation and renders it.
  * @author mzechner
- * 
+ *
  */
 public class Renderer {
   /** sprite batch to draw text **/
@@ -105,7 +105,7 @@ public class Renderer {
       in.close();
 
       shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
-      shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);        
+      shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       backgroundTexture = new Texture(Gdx.files.internal("data/planet.jpg"), Format.RGB565, true);
@@ -149,7 +149,7 @@ public class Renderer {
       explosionMesh.setVertices(vertices);
       font = new BitmapFont(Gdx.files.internal("data/font10.fnt"), Gdx.files.internal("data/font10.png"), false);
 
-      camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());      
+      camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     } catch (Exception ex) {
       ex.printStackTrace();
     }
@@ -197,7 +197,7 @@ public class Renderer {
     }
     spriteBatch.enableBlending();
     spriteBatch.setBlendFunction(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
-    font.draw(spriteBatch, status, 0, 320);   
+    font.draw(spriteBatch, status, 0, 320);
     spriteBatch.end();
 
     invaderAngle += app.getGraphics().getDeltaTime() * 90;
@@ -219,9 +219,9 @@ public class Renderer {
 
   private void setProjectionAndCamera (Graphics graphics, Ship ship, Application app) {
     camera.position.set(ship.position.x, 6, 2);
-    camera.direction.set(ship.position.x, 0, -4).sub(camera.position).nor();    
+    camera.direction.set(ship.position.x, 0, -4).sub(camera.position).nor();
     camera.update();
-    camera.apply(Gdx.gl10);   
+    camera.apply(Gdx.gl10);
   }
 
   float[] direction = {1, 0.5f, 0, 0};

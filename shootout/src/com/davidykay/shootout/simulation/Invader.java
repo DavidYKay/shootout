@@ -11,7 +11,7 @@
  * governing permissions and limitations under the License.
  */
 
-package com.badlogic.gdxinvaders.simulation;
+package com.davidykay.shootout.simulation;
 
 import com.badlogic.gdx.math.Vector3;
 
