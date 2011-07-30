@@ -88,7 +88,7 @@ public class GameLoop implements Screen, SimulationListener {
       float pitch   = input.getPitch();
       float roll    = input.getRoll();
 
-      simulation.setOrientation(azimuth, pitch, roll);
+      simulation.updateOrientation(azimuth, pitch, roll);
     }
 
     if (input.isKeyPressed(Keys.DPAD_LEFT)) simulation.moveShipLeft(app.getGraphics().getDeltaTime(), 0.5f);

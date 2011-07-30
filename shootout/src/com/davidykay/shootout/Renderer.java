@@ -234,7 +234,7 @@ public class Renderer {
 
     // Note that these are taken from StackOverflow:
     // http://stackoverflow.com/questions/5274514/how-do-i-use-the-android-compass-orientation-to-aim-an-opengl-camera
-    camera.position.set(0, 6, 2);
+    camera.position.set(0, 1, 2);
     camera.direction.set(0, 0, 1);
     camera.up.set(0, 1, 0);
 

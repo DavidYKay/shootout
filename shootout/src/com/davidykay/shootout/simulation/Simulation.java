@@ -14,6 +14,7 @@
 package com.davidykay.shootout.simulation;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
@@ -265,28 +266,63 @@ public class Simulation {
     }
   }
 
+  private LinkedList<Orientation> mOrientations = new LinkedList<Orientation>();
+  private static final int MAX_ORIENTATIONS = 15;
+
   private float mAzimuth;
   private float mPitch  ;
   private float mRoll   ;
-//  private float mYaw;
-  public void setOrientation(
+
+  private void averageOrientationValues() {
+    float azimuth = 0.0f;
+    float pitch   = 0.0f;
+    float roll    = 0.0f;
+    for (Orientation o : mOrientations) {
+      azimuth += o.azimuth;
+      pitch += o.pitch;
+      roll += o.roll;
+    }
+    int count = mOrientations.size();
+    mAzimuth = azimuth / count;
+    mPitch   = pitch / count;
+    mRoll    = roll / count;
+  }
+
+  /**
+   * Add a given orientation to our queue.
+   */
+  public void addOrientation(Orientation orientation) {
+
+    // Note that these are taken from StackOverflow:
+    // http://stackoverflow.com/questions/5274514/how-do-i-use-the-android-compass-orientation-to-aim-an-opengl-camera
+    mOrientations.offer(orientation);
+    if (mOrientations.size() > MAX_ORIENTATIONS) {
+      mOrientations.remove();
+    }
+    // TODO: Technically we don't care until we retrieve.
+    // Average out our values
+    averageOrientationValues();
+
+    Gdx.app.log(TAG, String.format("Orientation: (%s)",
+                                   orientation.toString()));
+  }
+
+  /**
+   * Take orientation data from the device.
+   */
+  public void updateOrientation(
       float azimuth ,
       float pitch   ,
       float roll
       ) {
+    Orientation orientation = new Orientation(
+        -azimuth,
+        -roll - 90,
+        -pitch);
       //mAzimuth = azimuth;
       //mPitch   = pitch;
       //mRoll    = roll;
-
-      // Note that these are taken from StackOverflow:
-      // http://stackoverflow.com/questions/5274514/how-do-i-use-the-android-compass-orientation-to-aim-an-opengl-camera
-      mAzimuth = -azimuth;
-      mPitch   = -roll - 90;
-      mRoll    = -pitch;
-      Gdx.app.log(TAG, String.format("Orientation: (%f, %f, %f)",
-                                     mRoll,
-                                     mPitch,
-                                     mAzimuth));
+    addOrientation(orientation);
   }
   public float getAzimuth() {
     return mAzimuth;
@@ -298,13 +334,25 @@ public class Simulation {
     return mRoll;
   }
 
-  //public class Player {
-  //  //public final Vector3 position = new Vector3(0,1.5f,0);
-  //  /** Angle left or right of the vertical */
-  //  public float yaw = 0.0f;
-  //  /** Angle above or below the horizon */
-  //  public float pitch = 0.0f;
-  //  /** Angle about the direction as defined by yaw and pitch */
-  //  public float roll = 0.0f;
-  //}
+  public class Orientation {
+    //public final Vector3 position = new Vector3(0,1.5f,0);
+    /** Angle left or right of the vertical */
+    public float azimuth = 0.0f;
+    /** Angle above or below the horizon */
+    public float pitch = 0.0f;
+    /** Angle about the direction as defined by yaw and pitch */
+    public float roll = 0.0f;
+
+    public Orientation(float azimuth, float pitch, float roll) {
+      this.azimuth = azimuth;
+      this.pitch   = pitch;
+      this.roll    = roll;
+    }
+    public String toString() {
+      return String.format("(%f, %f, %f)",
+                    roll,
+                    pitch,
+                    azimuth);
+    }
+  }
 }
