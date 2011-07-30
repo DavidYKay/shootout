@@ -15,6 +15,7 @@ package com.davidykay.shootout.simulation;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
@@ -25,6 +26,9 @@ public class Simulation {
   public final static float PLAYFIELD_MAX_X = 14;
   public final static float PLAYFIELD_MIN_Z = -15;
   public final static float PLAYFIELD_MAX_Z = 2;
+
+  public final static float PLAYFIELD_MIN_Y = -15;
+  public final static float PLAYFIELD_MAX_Y = 2;
 
   public final static float MAX_SHOTS = 4;
 
@@ -54,9 +58,19 @@ public class Simulation {
   private void populate () {
     ship = new Ship();
 
+    Random random = new Random();
     for (int row = 0; row < 4; row++) {
       for (int column = 0; column < 8; column++) {
-        Invader invader = new Invader(new Vector3(-PLAYFIELD_MAX_X / 2 + column * 2f, 0, PLAYFIELD_MIN_Z + row * 2f));
+        Invader invader = new Invader(
+            new Vector3(
+                //-PLAYFIELD_MAX_X / 2 + column * 2f,
+                //0,
+                //PLAYFIELD_MIN_Z + row * 2f
+                -PLAYFIELD_MAX_X / 2 + column * 2f,
+                random.nextInt(6),
+                PLAYFIELD_MIN_Z + row * 2f
+            )
+        );
         invaders.add(invader);
       }
     }
