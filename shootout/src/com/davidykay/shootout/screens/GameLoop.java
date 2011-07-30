@@ -96,7 +96,8 @@ public class GameLoop implements Screen, SimulationListener {
 
     //if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
 
-    if (input.isTouched()) {
+    //if (input.isTouched()) {
+    if (input.justTouched()) {
       final float x = input.getX();
       final float y = input.getY();
       Vector3 nearVector = new Vector3(x, y, 0);

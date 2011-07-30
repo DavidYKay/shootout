@@ -208,8 +208,13 @@ shots:
       }
     }
 
-    for (int i = 0; i < removedShots.size(); i++)
-      shots.remove(removedShots.get(i));
+    for (int i = 0; i < removedShots.size(); i++) {
+      Shot shot = removedShots.get(i);
+      if (!shot.isInvaderShot) {
+        shipShots.remove(shot);
+      }
+      shots.remove(shot);
+    }
   }
 
   private void checkNextLevel () {
@@ -278,6 +283,9 @@ shots:
       shots.add(shot);
       shipShots.add(shot);
       if (listener != null) listener.shot();
+    } else {
+      Gdx.app.log(TAG, String.format("Couldn't shoot. shipShots: %d",
+                                     shipShots.size()));
     }
   }
 
