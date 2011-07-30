@@ -15,6 +15,7 @@ package com.davidykay.shootout.simulation;
 
 import java.util.ArrayList;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 public class Simulation {
@@ -22,10 +23,11 @@ public class Simulation {
   public final static float PLAYFIELD_MAX_X = 14;
   public final static float PLAYFIELD_MIN_Z = -15;
   public final static float PLAYFIELD_MAX_Z = 2;
+  private static final String TAG = "Simulation";
 
-  public ArrayList<Invader> invaders = new ArrayList<Invader>();
-  public ArrayList<Block> blocks = new ArrayList<Block>();
-  public ArrayList<Shot> shots = new ArrayList<Shot>();
+  public ArrayList<Invader> invaders     = new ArrayList<Invader>();
+  public ArrayList<Block> blocks         = new ArrayList<Block>();
+  public ArrayList<Shot> shots           = new ArrayList<Shot>();
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
   public Shot shipShot = null;
@@ -206,6 +208,11 @@ public class Simulation {
 
     ship.position.x -= delta * Ship.SHIP_VELOCITY * scale;
     if (ship.position.x < PLAYFIELD_MIN_X) ship.position.x = PLAYFIELD_MIN_X;
+
+    //Gdx.app.log(TAG, String.format("moveShipLeft() to: (%f, %f, %f)",
+    //                         ship.position.x,
+    //                         ship.position.y,
+    //                         ship.position.z));
   }
 
   public void moveShipRight (float delta, float scale) {
@@ -213,11 +220,37 @@ public class Simulation {
 
     ship.position.x += delta * Ship.SHIP_VELOCITY * scale;
     if (ship.position.x > PLAYFIELD_MAX_X) ship.position.x = PLAYFIELD_MAX_X;
+
+    //Gdx.app.log(TAG, String.format("moveShipRight() to: (%f, %f, %f)",
+    //                         ship.position.x,
+    //                         ship.position.y,
+    //                         ship.position.z));
   }
 
+  /**
+   * Vanilla shot coming from the default position.
+   */
   public void shot () {
     if (shipShot == null && !ship.isExploding) {
       shipShot = new Shot(ship.position, false);
+      Gdx.app.log(TAG, String.format("shot(%s)",
+                                     ship.position.toString()
+                                    ));
+      shots.add(shipShot);
+      if (listener != null) listener.shot();
+    }
+  }
+
+  /**
+   * Shot appearing at the user's fingertip.
+   */
+  public void tapShot (float x, float y) {
+    if (shipShot == null && !ship.isExploding) {
+      //Vector3 vector = new Vector3(x, 0, -y);
+      Vector3 vector = new Vector3(x, 0, 0);
+      shipShot = new Shot(vector, false);
+      Gdx.app.log(TAG, String.format("tapShot(%s)",
+                                     vector.toString()));
       shots.add(shipShot);
       if (listener != null) listener.shot();
     }

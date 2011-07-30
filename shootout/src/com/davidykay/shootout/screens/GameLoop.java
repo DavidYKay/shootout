@@ -24,6 +24,15 @@ import com.davidykay.shootout.simulation.Simulation;
 import com.davidykay.shootout.simulation.SimulationListener;
 
 public class GameLoop implements Screen, SimulationListener {
+  private static final int RESOLUTION_X = 800;
+  private static final int RESOLUTION_Y = 480;
+
+  private static final float ASPECT_RATIO = RESOLUTION_X / RESOLUTION_Y;
+
+  private static final float TOUCH_SCALING_FACTOR = 12.0f;
+  private static final float TOUCH_SCALING_FACTOR_X = TOUCH_SCALING_FACTOR / RESOLUTION_X;
+  private static final float TOUCH_SCALING_FACTOR_Y = (TOUCH_SCALING_FACTOR * ASPECT_RATIO) / RESOLUTION_Y;
+
   /** the simulation **/
   private final Simulation simulation;
   /** the renderer **/
@@ -68,7 +77,14 @@ public class GameLoop implements Screen, SimulationListener {
     if (input.isKeyPressed(Keys.DPAD_LEFT)) simulation.moveShipLeft(app.getGraphics().getDeltaTime(), 0.5f);
     if (input.isKeyPressed(Keys.DPAD_RIGHT)) simulation.moveShipRight(app.getGraphics().getDeltaTime(), 0.5f);
 
-    if (input.isTouched() || input.isKeyPressed(Keys.SPACE)) simulation.shot();
+    if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
+
+    if (input.isTouched()) {
+      simulation.tapShot(
+          (input.getX() - (RESOLUTION_X / 2)) * TOUCH_SCALING_FACTOR_X,
+          (input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
+      );
+    }
   }
 
   @Override public void explosion () {

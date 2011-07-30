@@ -89,6 +89,7 @@ public class Renderer {
       spriteBatch = new SpriteBatch();
 
       InputStream in = Gdx.files.internal("data/ship.obj").read();
+      //InputStream in = Gdx.files.internal("data/cube_01.obj").read();
       shipMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
@@ -104,7 +105,8 @@ public class Renderer {
       shotMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
-      shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
+      //shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
+      shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
@@ -218,8 +220,11 @@ public class Renderer {
   final Vector3 dir = new Vector3();
 
   private void setProjectionAndCamera (Graphics graphics, Ship ship, Application app) {
-    camera.position.set(ship.position.x, 6, 2);
+    //camera.position.set(ship.position.x, 6, 2);
+
+    camera.position.set(0, 6, 2);
     camera.direction.set(ship.position.x, 0, -4).sub(camera.position).nor();
+
     camera.update();
     camera.apply(Gdx.gl10);
   }
