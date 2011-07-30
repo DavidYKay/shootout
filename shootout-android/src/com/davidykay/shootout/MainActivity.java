@@ -15,6 +15,6 @@ public class MainActivity extends AndroidApplication {
     setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
     AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
     config.useWakelock = true;    
-    initialize(new ShootOut(),config);   
+    initialize(new GdxInvaders(),config);
   }
 }
