@@ -19,6 +19,7 @@ import java.util.Random;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 
 public class Simulation {
 
@@ -40,9 +41,8 @@ public class Simulation {
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
 
-  //public Shot[] shipShots = new Shot[MAX_SHOTS];
   public ArrayList<Shot> shipShots = new ArrayList<Shot>();
-  //public Shot shipShot = null;
+  public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
   public transient SimulationListener listener;
   public float multiplier = 1;
   public int score;
@@ -50,6 +50,7 @@ public class Simulation {
 
   private ArrayList<Shot> removedShots = new ArrayList<Shot>();
   private ArrayList<Explosion> removedExplosions = new ArrayList<Explosion>();
+  private ArrayList<RayShot> removedRays = new ArrayList<RayShot>();
 
   public Simulation () {
     populate();
@@ -88,6 +89,7 @@ public class Simulation {
     ship.update(delta);
     updateInvaders(delta);
     updateShots(delta);
+    updateRays(delta);
     updateExplosions(delta);
     checkShipCollision();
     checkInvaderCollision();
@@ -118,8 +120,6 @@ public class Simulation {
       }
     }
 
-    //if (shipShot != null && shipShot.hasLeftField) shipShot = null;
-
     // Invader shots.
     //if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
     //  int index = (int)(Math.random() * (invaders.size() - 1));
@@ -127,6 +127,20 @@ public class Simulation {
     //  shots.add(shot);
     //  if (listener != null) listener.shot();
     //}
+  }
+
+  private void updateRays (float delta) {
+    removedRays.clear();
+    for (int i = 0; i < mRays.size(); i++) {
+      RayShot ray = mRays.get(i);
+      ray.update(delta);
+      if (ray.hasLeftField) removedRays.add(ray);
+    }
+
+    for (int i = 0; i < removedRays.size(); i++) {
+      RayShot ray = removedRays.get(i);
+      mRays.remove(ray);
+    }
   }
 
   public void updateExplosions (float delta) {
@@ -301,6 +315,20 @@ shots:
       Gdx.app.log(TAG, String.format("Couldn't shoot. shipShots: %d",
                                      shipShots.size()));
     }
+  }
+
+  public void tapRay(Ray ray) {
+    Vector3 direction = new Vector3(0, 0, -1);
+    RayShot vanilla = new RayShot(ray, false);
+    RayShot custom  = new RayShot(
+            ray.origin,
+            direction,
+            false
+            );
+    mRays.add(
+        vanilla
+        //custom
+    );
   }
 
   private LinkedList<Orientation> mOrientations = new LinkedList<Orientation>();

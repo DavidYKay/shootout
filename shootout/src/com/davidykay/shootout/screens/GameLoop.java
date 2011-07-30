@@ -31,6 +31,8 @@ import com.davidykay.shootout.simulation.SimulationListener;
 public class GameLoop implements Screen, SimulationListener {
   private static final String TAG = "GameLoop";
 
+  private static final boolean FLAT_MODE = false;
+
   private static final int RESOLUTION_X = 800;
   private static final int RESOLUTION_Y = 480;
 
@@ -113,26 +115,48 @@ public class GameLoop implements Screen, SimulationListener {
 
       Vector3 intersection = new Vector3();
       Vector3 finalVector;
-      if (Intersector.intersectRayPlane(
-          pickRay,
-          gamePlane,
-          intersection)
-         ) {
-        finalVector = new Vector3(intersection);
-        if (finalVector.equals(nearVector)) {
-          Gdx.app.log(TAG, String.format("Near Vector! finalVector:(%s)",
-                                         finalVector.toString()));
+
+      if (FLAT_MODE) {
+        // Flat Mode
+        if (Intersector.intersectRayPlane(
+            pickRay,
+            gamePlane,
+            intersection)
+           ) {
+          finalVector = new Vector3(intersection);
+          if (finalVector.equals(nearVector)) {
+            Gdx.app.log(TAG, String.format("Near Vector! finalVector:(%s)",
+                                           finalVector.toString()));
+          } else {
+            Gdx.app.log(TAG, String.format("INTERSECTION! finalVector:(%s)",
+                                           finalVector.toString()));
+          }
         } else {
-          Gdx.app.log(TAG, String.format("INTERSECTION! finalVector:(%s)",
-                                         finalVector.toString()));
+          Gdx.app.log(TAG, String.format("NO INTERSECTION. nearVector:(%s)",
+                                         nearVector.toString()));
+          finalVector = new Vector3(nearVector);
         }
       } else {
-        Gdx.app.log(TAG, String.format("NO INTERSECTION. nearVector:(%s)",
-                                       nearVector.toString()));
+        // 3D Mode
+
         finalVector = new Vector3(nearVector);
+
+        //for (Invader invader : invaders) {
+        //  if (
+        //      Intersector.intersectRayPlane(
+        //          pickRay,
+        //          gamePlane,
+        //          intersection
+        //          )
+        //     ) {
+
+        //  }
+        //}
       }
 
-      simulation.tapShot(finalVector);
+      //simulation.tapShot(nearVector);
+      //simulation.tapShot(finalVector);
+      simulation.tapRay(pickRay);
     } else {
       // If we haven't been touched, let's look at the orientation. This in an attempt to lower
       // impulse from user's finger.

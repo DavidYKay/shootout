@@ -34,9 +34,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.loaders.ModelLoaderOld;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.davidykay.shootout.simulation.Block;
 import com.davidykay.shootout.simulation.Explosion;
 import com.davidykay.shootout.simulation.Invader;
+import com.davidykay.shootout.simulation.RayShot;
 import com.davidykay.shootout.simulation.Ship;
 import com.davidykay.shootout.simulation.Shot;
 import com.davidykay.shootout.simulation.Simulation;
@@ -62,6 +64,8 @@ public class Renderer {
   private Mesh blockMesh;
   /** the shot mesh **/
   private Mesh shotMesh;
+  /** the ray mesh **/
+  private Mesh rayMesh;
   /** the background texture **/
   private Texture backgroundTexture;
   /** the explosion mesh **/
@@ -106,6 +110,8 @@ public class Renderer {
       in = Gdx.files.internal("data/shot.obj").read();
       shotMesh = ModelLoaderOld.loadObj(in);
       in.close();
+
+      rayMesh = shotMesh;
 
       //shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
       shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
@@ -185,6 +191,8 @@ public class Renderer {
 
     gl.glDisable(GL10.GL_LIGHTING);
     renderShots(gl, simulation.shots);
+
+    renderRays(gl, simulation.mRays);
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
     renderExplosions(gl, simulation.explosions);
@@ -313,6 +321,18 @@ public class Renderer {
       gl.glPushMatrix();
       gl.glTranslatef(shot.position.x, shot.position.y, shot.position.z);
       shotMesh.render(GL10.GL_TRIANGLES);
+      gl.glPopMatrix();
+    }
+    gl.glColor4f(1, 1, 1, 1);
+  }
+
+  private void renderRays (GL10 gl, ArrayList<RayShot> rays) {
+    gl.glColor4f(1, 0, 1, 1);
+    for (int i = 0; i < rays.size(); i++) {
+      RayShot ray = rays.get(i);
+      gl.glPushMatrix();
+      gl.glTranslatef(ray.position.x, ray.position.y, ray.position.z);
+      rayMesh.render(GL10.GL_TRIANGLES);
       gl.glPopMatrix();
     }
     gl.glColor4f(1, 1, 1, 1);
