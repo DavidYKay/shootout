@@ -20,10 +20,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 public class Simulation {
+
   public final static float PLAYFIELD_MIN_X = -14;
   public final static float PLAYFIELD_MAX_X = 14;
   public final static float PLAYFIELD_MIN_Z = -15;
   public final static float PLAYFIELD_MAX_Z = 2;
+
+  public final static float MAX_SHOTS = 4;
+
   private static final String TAG = "Simulation";
 
   public ArrayList<Invader> invaders     = new ArrayList<Invader>();
@@ -31,7 +35,10 @@ public class Simulation {
   public ArrayList<Shot> shots           = new ArrayList<Shot>();
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
-  public Shot shipShot = null;
+
+  //public Shot[] shipShots = new Shot[MAX_SHOTS];
+  public ArrayList<Shot> shipShots = new ArrayList<Shot>();
+  //public Shot shipShot = null;
   public transient SimulationListener listener;
   public float multiplier = 1;
   public int score;
@@ -89,11 +96,17 @@ public class Simulation {
       if (shot.hasLeftField) removedShots.add(shot);
     }
 
-    for (int i = 0; i < removedShots.size(); i++)
-      shots.remove(removedShots.get(i));
+    for (int i = 0; i < removedShots.size(); i++) {
+      Shot shot = removedShots.get(i);
+      shots.remove(shot);
+      if (!shot.isInvaderShot) {
+        shipShots.remove(shot);
+      }
+    }
 
-    if (shipShot != null && shipShot.hasLeftField) shipShot = null;
+    //if (shipShot != null && shipShot.hasLeftField) shipShot = null;
 
+    // Invader shots.
     //if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
     //  int index = (int)(Math.random() * (invaders.size() - 1));
     //  Shot shot = new Shot(invaders.get(index).position, true);
@@ -115,18 +128,28 @@ public class Simulation {
   }
 
   private void checkInvaderCollision () {
-    if (shipShot == null) return;
+    //if (shipShot == null) return;
+    if (shipShots.isEmpty()) return;
 
+    // Brute force collision detection.
+
+invaders:
     for (int j = 0; j < invaders.size(); j++) {
       Invader invader = invaders.get(j);
-      if (invader.position.dst(shipShot.position) < Invader.INVADER_RADIUS) {
-        shots.remove(shipShot);
-        shipShot = null;
-        invaders.remove(invader);
-        explosions.add(new Explosion(invader.position));
-        if (listener != null) listener.explosion();
-        score += Invader.INVADER_POINTS;
-        break;
+shots:
+      for (Shot shipShot : shipShots) {
+        if (invader.position.dst(shipShot.position) < Invader.INVADER_RADIUS) {
+          // Remove this shot from both the ship shots and the total shots.
+          shipShots.remove(shipShot);
+          shots.remove(shipShot);
+          //shipShot = null;
+          invaders.remove(invader);
+          explosions.add(new Explosion(invader.position));
+          if (listener != null) listener.explosion();
+          score += Invader.INVADER_POINTS;
+          // Go to the next invader.
+          break invaders;
+        }
       }
     }
   }
@@ -193,7 +216,8 @@ public class Simulation {
     if (invaders.size() == 0 && ship.lives > 0) {
       blocks.clear();
       shots.clear();
-      shipShot = null;
+      //shipShot = null;
+      shipShots.clear();
       Vector3 shipPosition = ship.position;
       int lives = ship.lives;
       populate();
@@ -228,40 +252,31 @@ public class Simulation {
     //                         ship.position.z));
   }
 
-  /**
-   * Vanilla shot coming from the default position.
-   */
-  public void shot () {
-    if (shipShot == null && !ship.isExploding) {
-      shipShot = new Shot(ship.position, false);
-      Gdx.app.log(TAG, String.format("shot(%s)",
-                                     ship.position.toString()
-                                    ));
-      shots.add(shipShot);
-      if (listener != null) listener.shot();
-    }
-  }
+  ///**
+  // * Vanilla shot coming from the default position.
+  // */
+  //public void shot () {
+  //  if (shipShot == null && !ship.isExploding) {
+  //    shipShot = new Shot(ship.position, false);
+  //    Gdx.app.log(TAG, String.format("shot(%s)",
+  //                                   ship.position.toString()
+  //                                  ));
+  //    shots.add(shipShot);
+  //    if (listener != null) listener.shot();
+  //  }
+  //}
 
   /**
    * Shot appearing at the user's fingertip.
    */
-  public void tapShot (float x, float y) {
-    if (shipShot == null && !ship.isExploding) {
-      //Vector3 vector = new Vector3(x, 0, -y);
-      Vector3 vector = new Vector3(x, 0, y);
-      shipShot = new Shot(vector, false);
-      Gdx.app.log(TAG, String.format("tapShot(%s)",
-                                     vector.toString()));
-      shots.add(shipShot);
-      if (listener != null) listener.shot();
-    }
-  }
   public void tapShot (Vector3 vector) {
-    if (shipShot == null && !ship.isExploding) {
-      shipShot = new Shot(vector, false);
+    //if (shipShot == null && !ship.isExploding) {
+    if (!ship.isExploding && shipShots.size() < MAX_SHOTS) {
+      Shot shot = new Shot(vector, false);
       Gdx.app.log(TAG, String.format("tapShot(%s)",
                                      vector.toString()));
-      shots.add(shipShot);
+      shots.add(shot);
+      shipShots.add(shot);
       if (listener != null) listener.shot();
     }
   }

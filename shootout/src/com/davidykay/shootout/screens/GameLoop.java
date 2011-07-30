@@ -94,7 +94,7 @@ public class GameLoop implements Screen, SimulationListener {
     if (input.isKeyPressed(Keys.DPAD_LEFT)) simulation.moveShipLeft(app.getGraphics().getDeltaTime(), 0.5f);
     if (input.isKeyPressed(Keys.DPAD_RIGHT)) simulation.moveShipRight(app.getGraphics().getDeltaTime(), 0.5f);
 
-    if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
+    //if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
 
     if (input.isTouched()) {
       final float x = input.getX();
