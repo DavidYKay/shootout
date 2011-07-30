@@ -83,20 +83,11 @@ public class GameLoop implements Screen, SimulationListener {
         simulation.moveShipLeft(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
       else
         simulation.moveShipRight(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
-    } else {
-      float azimuth = input.getAzimuth();
-      float pitch   = input.getPitch();
-      float roll    = input.getRoll();
-
-      simulation.updateOrientation(azimuth, pitch, roll);
-    }
+    } 
 
     if (input.isKeyPressed(Keys.DPAD_LEFT)) simulation.moveShipLeft(app.getGraphics().getDeltaTime(), 0.5f);
     if (input.isKeyPressed(Keys.DPAD_RIGHT)) simulation.moveShipRight(app.getGraphics().getDeltaTime(), 0.5f);
 
-    //if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
-
-    //if (input.isTouched()) {
     if (input.justTouched()) {
       final float x = input.getX();
       final float y = input.getY();
@@ -141,14 +132,15 @@ public class GameLoop implements Screen, SimulationListener {
         finalVector = new Vector3(nearVector);
       }
 
-      //finalVector.y = 0;
       simulation.tapShot(finalVector);
-      //simulation.tapShot(
-      //    (input.getX() - (RESOLUTION_X / 2)) * TOUCH_SCALING_FACTOR_X,
-      //    //(input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
-      //    (RESOLUTION_Y - input.getY()) * -TOUCH_SCALING_FACTOR_Y
-      //    //+ SAFETY_BUFFER
-      //);
+    } else {
+      // If we haven't been touched, let's look at the orientation. This in an attempt to lower
+      // impulse from user's finger.
+      float azimuth = input.getAzimuth();
+      float pitch   = input.getPitch();
+      float roll    = input.getRoll();
+
+      simulation.updateOrientation(azimuth, pitch, roll);
     }
   }
 
