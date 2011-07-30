@@ -32,6 +32,7 @@ public class GameLoop implements Screen, SimulationListener {
   private static final float TOUCH_SCALING_FACTOR = 12.0f;
   private static final float TOUCH_SCALING_FACTOR_X = TOUCH_SCALING_FACTOR / RESOLUTION_X;
   private static final float TOUCH_SCALING_FACTOR_Y = (TOUCH_SCALING_FACTOR * ASPECT_RATIO) / RESOLUTION_Y;
+  //private static final float SAFETY_BUFFER = TOUCH_SCALING_FACTOR / 2;
 
   /** the simulation **/
   private final Simulation simulation;
@@ -82,7 +83,9 @@ public class GameLoop implements Screen, SimulationListener {
     if (input.isTouched()) {
       simulation.tapShot(
           (input.getX() - (RESOLUTION_X / 2)) * TOUCH_SCALING_FACTOR_X,
-          (input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
+          //(input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
+          (RESOLUTION_Y - input.getY()) * -TOUCH_SCALING_FACTOR_Y
+          //+ SAFETY_BUFFER
       );
     }
   }

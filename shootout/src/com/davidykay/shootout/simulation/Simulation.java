@@ -247,7 +247,7 @@ public class Simulation {
   public void tapShot (float x, float y) {
     if (shipShot == null && !ship.isExploding) {
       //Vector3 vector = new Vector3(x, 0, -y);
-      Vector3 vector = new Vector3(x, 0, 0);
+      Vector3 vector = new Vector3(x, 0, y);
       shipShot = new Shot(vector, false);
       Gdx.app.log(TAG, String.format("tapShot(%s)",
                                      vector.toString()));
