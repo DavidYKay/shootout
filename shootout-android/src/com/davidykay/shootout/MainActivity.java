@@ -2,7 +2,7 @@ package com.davidykay.shootout;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.davidykay.shootout.ShootOut;
+import com.davidykay.shootout.screens.ShootOut;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
