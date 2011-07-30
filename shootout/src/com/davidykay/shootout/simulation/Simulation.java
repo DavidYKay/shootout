@@ -255,4 +255,13 @@ public class Simulation {
       if (listener != null) listener.shot();
     }
   }
+  public void tapShot (Vector3 vector) {
+    if (shipShot == null && !ship.isExploding) {
+      shipShot = new Shot(vector, false);
+      Gdx.app.log(TAG, String.format("tapShot(%s)",
+                                     vector.toString()));
+      shots.add(shipShot);
+      if (listener != null) listener.shot();
+    }
+  }
 }

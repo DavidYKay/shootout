@@ -15,15 +15,22 @@ package com.davidykay.shootout.screens;
 
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Files.FileType;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Plane;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.collision.Ray;
 import com.davidykay.shootout.Renderer;
 import com.davidykay.shootout.simulation.Simulation;
 import com.davidykay.shootout.simulation.SimulationListener;
 
 public class GameLoop implements Screen, SimulationListener {
+  private static final String TAG = "GameLoop";
+
   private static final int RESOLUTION_X = 800;
   private static final int RESOLUTION_Y = 480;
 
@@ -81,12 +88,57 @@ public class GameLoop implements Screen, SimulationListener {
     if (input.isKeyPressed(Keys.SPACE)) simulation.shot();
 
     if (input.isTouched()) {
-      simulation.tapShot(
-          (input.getX() - (RESOLUTION_X / 2)) * TOUCH_SCALING_FACTOR_X,
-          //(input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
-          (RESOLUTION_Y - input.getY()) * -TOUCH_SCALING_FACTOR_Y
-          //+ SAFETY_BUFFER
+      final float x = input.getX();
+      final float y = input.getY();
+      Vector3 nearVector = new Vector3(x, y, 0);
+      Vector3 farVector = new Vector3(x, y, 1);
+
+      renderer.unproject(nearVector);
+      renderer.unproject(farVector);
+
+      /** Vector tracing between the near plane and the far plane **/
+      Vector3 inVector = new Vector3(nearVector);
+
+      final Plane originPlane = new Plane(
+          new Vector3(0, 0, 0),
+          new Vector3(1, 0, 0),
+          new Vector3(0, 0, 1)
+          );
+
+      Ray pickRay = renderer.getCamera().getPickRay(
+          x,
+          y
       );
+
+      Vector3 intersection = new Vector3();
+      Vector3 finalVector;
+      if (Intersector.intersectRayPlane(
+          pickRay,
+          originPlane,
+          intersection)
+         ) {
+        finalVector = new Vector3(intersection);
+        if (finalVector.equals(nearVector)) {
+          Gdx.app.log(TAG, String.format("Near Vector! finalVector:(%s)",
+                                         finalVector.toString()));
+        } else {
+          Gdx.app.log(TAG, String.format("INTERSECTION! finalVector:(%s)",
+                                         finalVector.toString()));
+        }
+      } else {
+        Gdx.app.log(TAG, String.format("NO INTERSECTION. nearVector:(%s)",
+                                       nearVector.toString()));
+        finalVector = new Vector3(nearVector);
+      }
+
+      //finalVector.y = 0;
+      simulation.tapShot(finalVector);
+      //simulation.tapShot(
+      //    (input.getX() - (RESOLUTION_X / 2)) * TOUCH_SCALING_FACTOR_X,
+      //    //(input.getY() - (RESOLUTION_Y / 2)) * TOUCH_SCALING_FACTOR_Y
+      //    (RESOLUTION_Y - input.getY()) * -TOUCH_SCALING_FACTOR_Y
+      //    //+ SAFETY_BUFFER
+      //);
     }
   }
 

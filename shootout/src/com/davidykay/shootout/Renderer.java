@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Graphics;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
@@ -46,6 +47,7 @@ import com.davidykay.shootout.simulation.Simulation;
  *
  */
 public class Renderer {
+  private static final String TAG = "Renderer";
   /** sprite batch to draw text **/
   private SpriteBatch spriteBatch;
   /** the ship mesh **/
@@ -301,6 +303,22 @@ public class Renderer {
       gl.glPopMatrix();
     }
     gl.glDisable(GL10.GL_BLEND);
+  }
+
+  ////////////////////////////////////////
+  // Utility
+  ////////////////////////////////////////
+  public Camera getCamera() {
+    return camera;
+  }
+
+  public void unproject(Vector3 touchLocation) {
+    Vector3 newLocation = new Vector3(touchLocation);
+    camera.unproject(touchLocation);
+    //Gdx.app.log(TAG, String.format("unproject from: (%s) to: (%s)",
+    //                               newLocation.toString(),
+    //                               touchLocation.toString()
+    //                               ));
   }
 
   public void dispose () {
