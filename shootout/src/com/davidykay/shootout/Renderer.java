@@ -170,7 +170,9 @@ public class Renderer {
     gl.glEnable(GL10.GL_DEPTH_TEST);
     gl.glEnable(GL10.GL_CULL_FACE);
 
-    setProjectionAndCamera(app.getGraphics(), simulation.ship, app);
+    //setProjectionAndCamera(app.getGraphics(), simulation.ship, app);
+    setProjectionAndCameraAugmentedReality(app.getGraphics(), simulation, app);
+
     setLighting(gl);
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -220,6 +222,19 @@ public class Renderer {
   }
 
   final Vector3 dir = new Vector3();
+
+  private void setProjectionAndCameraAugmentedReality(Graphics graphics, Simulation simulation, Application app) {
+
+    camera.position.set(0, 6, 2);
+    camera.direction.set(0, 0, -4).sub(camera.position).nor();
+    //camera.direction.set(0, 0, 0);
+    camera.rotate(simulation.getPitch()   , 1 , 0 , 0);
+    camera.rotate(simulation.getRoll()    , 0 , 1 , 0);
+    camera.rotate(simulation.getAzimuth() , 0 , 0 , 1);
+
+    camera.update();
+    camera.apply(Gdx.gl10);
+  }
 
   private void setProjectionAndCamera (Graphics graphics, Ship ship, Application app) {
     //camera.position.set(ship.position.x, 6, 2);

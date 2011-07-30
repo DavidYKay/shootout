@@ -264,4 +264,30 @@ public class Simulation {
       if (listener != null) listener.shot();
     }
   }
+
+  private float mAzimuth;
+  private float mPitch  ;
+  private float mRoll   ;
+  public void setOrientation(
+      float azimuth ,
+      float pitch   ,
+      float roll
+      ) {
+      mAzimuth = azimuth;
+      mPitch   = pitch;
+      mRoll    = roll;
+      Gdx.app.log(TAG, String.format("Orientation: (%f, %f, %f)",
+                                     roll,
+                                     pitch,
+                                     azimuth));
+  }
+  public float getAzimuth() {
+    return mAzimuth;
+  }
+  public float getPitch() {
+    return mPitch;
+  }
+  public float getRoll() {
+    return mRoll;
+  }
 }

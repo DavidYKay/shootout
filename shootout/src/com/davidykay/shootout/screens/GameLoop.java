@@ -77,10 +77,19 @@ public class GameLoop implements Screen, SimulationListener {
     simulation.update(app.getGraphics().getDeltaTime());
 
     Input input = app.getInput();
-    if (input.getAccelerometerY() < 0)
-      simulation.moveShipLeft(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
-    else
-      simulation.moveShipRight(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
+    final boolean ACCELEROMETER_STEERING = false;
+    if (ACCELEROMETER_STEERING) {
+      if (input.getAccelerometerY() < 0)
+        simulation.moveShipLeft(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
+      else
+        simulation.moveShipRight(app.getGraphics().getDeltaTime(), Math.abs(input.getAccelerometerY()) / 10);
+    } else {
+      float azimuth = input.getAzimuth();
+      float pitch   = input.getPitch();
+      float roll    = input.getRoll();
+
+      simulation.setOrientation(azimuth, pitch, roll);
+    }
 
     if (input.isKeyPressed(Keys.DPAD_LEFT)) simulation.moveShipLeft(app.getGraphics().getDeltaTime(), 0.5f);
     if (input.isKeyPressed(Keys.DPAD_RIGHT)) simulation.moveShipRight(app.getGraphics().getDeltaTime(), 0.5f);
