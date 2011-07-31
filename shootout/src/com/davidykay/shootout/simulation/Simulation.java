@@ -64,6 +64,10 @@ public class Simulation {
     ship = new Ship();
 
     Random random = new Random();
+
+    final float ROW_SIZE = 2.5f;
+    final float COLUMN_SIZE = 2.5f;
+
     for (int row = 0; row < ENEMY_ROWS; row++) {
       for (int column = 0; column < ENEMY_COLUMNS; column++) {
         Invader invader = new Invader(
@@ -71,22 +75,22 @@ public class Simulation {
                 //-PLAYFIELD_MAX_X / 2 + column * 2f,
                 //0,
                 //PLAYFIELD_MIN_Z + row * 2f
-                -PLAYFIELD_MAX_X / 2 + column * 2f,
+                -PLAYFIELD_MAX_X / 2 + column * COLUMN_SIZE,
                 random.nextInt(6),
-                PLAYFIELD_MIN_Z + row * 2f
+                PLAYFIELD_MIN_Z + row * ROW_SIZE
             )
         );
         invaders.add(invader);
       }
     }
 
-    for (int shield = 0; shield < 3; shield++) {
-      blocks.add(new Block(new Vector3(-10 + shield * 10 - 1, 0, -2)));
-      blocks.add(new Block(new Vector3(-10 + shield * 10 - 1, 0, -3)));
-      blocks.add(new Block(new Vector3(-10 + shield * 10 + 0, 0, -3)));
-      blocks.add(new Block(new Vector3(-10 + shield * 10 + 1, 0, -3)));
-      blocks.add(new Block(new Vector3(-10 + shield * 10 + 1, 0, -2)));
-    }
+    //for (int shield = 0; shield < 3; shield++) {
+    //  blocks.add(new Block(new Vector3(-10 + shield * 10 - 1, 0, -2)));
+    //  blocks.add(new Block(new Vector3(-10 + shield * 10 - 1, 0, -3)));
+    //  blocks.add(new Block(new Vector3(-10 + shield * 10 + 0, 0, -3)));
+    //  blocks.add(new Block(new Vector3(-10 + shield * 10 + 1, 0, -3)));
+    //  blocks.add(new Block(new Vector3(-10 + shield * 10 + 1, 0, -2)));
+    //}
   }
 
   public void update (float delta) {
@@ -97,7 +101,7 @@ public class Simulation {
     updateExplosions(delta);
     checkShipCollision();
     checkInvaderCollision();
-    checkBlockCollision();
+    //checkBlockCollision();
     checkNextLevel();
   }
 
