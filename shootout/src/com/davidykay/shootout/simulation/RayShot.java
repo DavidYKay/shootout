@@ -6,8 +6,11 @@ import com.badlogic.gdx.math.collision.Ray;
 
 public class RayShot {
   private static final String TAG = "RayShot";
+  private static float PLAYER_SHOT_VELOCITY = 10;
+  private static float ALIEN_SHOT_VELOCITY = 5;
 
-  public static float SHOT_VELOCITY = 10;
+  /** Speed which our shots move at. */
+  private float shotVelocity = 10;
   public final Vector3 position = new Vector3();
   /** A unit vector which shows our current direction. */
   public final Vector3 direction = new Vector3();
@@ -22,12 +25,13 @@ public class RayShot {
     this.position.set(position);
     this.direction.set(direction);
     this.isInvaderShot = isInvaderShot;
+    this.shotVelocity = isInvaderShot ? ALIEN_SHOT_VELOCITY : PLAYER_SHOT_VELOCITY;
   }
 
   public void update (float delta) {
-    position.x += direction.x * SHOT_VELOCITY * delta;
-    position.y += direction.y * SHOT_VELOCITY * delta;
-    position.z += direction.z * SHOT_VELOCITY * delta;
+    position.x += direction.x * shotVelocity * delta;
+    position.y += direction.y * shotVelocity * delta;
+    position.z += direction.z * shotVelocity * delta;
 
     Gdx.app.log(TAG, String.format("rayShot moving to: (%f, %f, %f)",
                              position.x,
