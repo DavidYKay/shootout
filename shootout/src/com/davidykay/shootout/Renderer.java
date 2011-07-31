@@ -117,7 +117,9 @@ public class Renderer {
       blockMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
-      in = Gdx.files.internal("data/shot.obj").read();
+      //in = Gdx.files.internal("data/shot.obj").read();
+      //in = Gdx.files.internal("data/laser.obj").read();
+      in = Gdx.files.internal("data/bomb.obj").read();
       shotMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
@@ -377,7 +379,11 @@ public class Renderer {
   }
 
   private void renderRays (GL10 gl, ArrayList<RayShot> rays) {
-    gl.glColor4f(1, 0, 1, 1);
+    //gl.glColor4f(1, 0, 1, 1);
+    //0, 215, 237
+    //gl.glColor4f(1, 0, 1, 1);
+    gl.glColor4f(0, 215/255.0f, 237/255.0f, 1);
+
     for (int i = 0; i < rays.size(); i++) {
       RayShot ray = rays.get(i);
       gl.glPushMatrix();

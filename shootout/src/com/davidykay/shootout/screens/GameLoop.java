@@ -59,10 +59,9 @@ public class GameLoop implements Screen, SimulationListener {
     simulation = new Simulation();
     simulation.listener = this;
     renderer = new Renderer(app);
-    explosion = app.getAudio().newSound(app.getFiles().getFileHandle("data/explosion.ogg", FileType.Internal));
-    //explosion = app.getAudio().newSound(app.getFiles().getFileHandle("data/sound/explosion/Echoing Boom.ogg", FileType.Internal));
-    shot = app.getAudio().newSound(app.getFiles().getFileHandle("data/shot.ogg", FileType.Internal));
-    ray = app.getAudio().newSound(app.getFiles().getFileHandle("data/Standard Laser.ogg", FileType.Internal));
+    explosion = app.getAudio().newSound(app.getFiles().getFileHandle("data/Echoing Boom.ogg", FileType.Internal));
+    shot = app.getAudio().newSound(app.getFiles().getFileHandle("data/Mid Laser.ogg", FileType.Internal));
+    ray = app.getAudio().newSound(app.getFiles().getFileHandle("data/Long Laser.ogg", FileType.Internal));
   }
 
   @Override public void dispose () {
