@@ -9,8 +9,12 @@ public class RayShot {
   private static float PLAYER_SHOT_VELOCITY = 10;
   private static float ALIEN_SHOT_VELOCITY = 5;
 
+  private static float PLAYER_SHOT_RADIUS = 1;
+  private static float  ALIEN_SHOT_RADIUS = 2;
+
   /** Speed which our shots move at. */
-  private float shotVelocity = 10;
+  private float shotVelocity;
+  public float radius;
   public final Vector3 position = new Vector3();
   /** A unit vector which shows our current direction. */
   public final Vector3 direction = new Vector3();
@@ -26,6 +30,7 @@ public class RayShot {
     this.direction.set(direction);
     this.isInvaderShot = isInvaderShot;
     this.shotVelocity = isInvaderShot ? ALIEN_SHOT_VELOCITY : PLAYER_SHOT_VELOCITY;
+    this.radius       = isInvaderShot ? ALIEN_SHOT_RADIUS : PLAYER_SHOT_RADIUS;
   }
 
   public void update (float delta) {

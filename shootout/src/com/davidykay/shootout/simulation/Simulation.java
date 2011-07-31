@@ -98,14 +98,18 @@ public class Simulation {
   //////////////////////////////////////////////////////////////////////
 
   public void update (float delta) {
-    ship.update(delta);
-    updateInvaders(delta);
-    updateRays(delta);
-    updateExplosions(delta);
-    checkShipCollision();
-    checkInvaderCollision();
-    //checkBlockCollision();
-    checkNextLevel();
+    synchronized (mShipRays) {
+      ship.update(delta);
+      updateInvaders(delta);
+      updateRays(delta);
+      updateExplosions(delta);
+      checkShipCollision();
+      checkInvaderCollision();
+      //checkBlockCollision();
+      checkNextLevel();
+      //synchronized (mShipRays) {
+      //}
+    }
   }
 
   private void updateInvaders (float delta) {
@@ -121,10 +125,13 @@ public class Simulation {
     ArrayList<RayShot> rays = getAllRays();
 
     for (RayShot ray : rays) {
+      // Move.
       ray.update(delta);
+      // If they've left the building, remove.
       if (ray.hasLeftField) removedRays.add(ray);
     }
 
+    // Clear up removed
     for (RayShot ray : removedRays) {
       if (ray.isInvaderShot) {
         mAlienRays.remove(ray);
@@ -133,11 +140,25 @@ public class Simulation {
       }
     }
 
+    // Check player shots against computer shots.
+rays:
+    for (RayShot ray: mShipRays) {
+      for (RayShot enemyRay: mAlienRays) {
+        if (enemyRay.position.dst(ray.position) < ray.radius + enemyRay.radius) {
+          // Boom!
+          mShipRays.remove(ray);
+          mAlienRays.remove(enemyRay);
+          explosions.add(new Explosion(enemyRay.position));
+          if (listener != null) listener.explosion();
+          continue rays;
+        }
+      }
+    }
+
     // UFOs shoot!
     if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
       int index = (int)(Math.random() * (invaders.size() - 1));
       Vector3 position = invaders.get(index).position;
-      //Vector3 direction = position.sub(new Vector3(0,0,0)).nor();
       Vector3 direction = new Vector3(0,0,0).sub(position).nor();
       RayShot shot = new RayShot(position,
                                  direction,
@@ -292,8 +313,9 @@ shots:
             false
             );
     RayShot rayshot = vanilla;
-    //mRays.add(rayshot);
-    mShipRays.add(rayshot);
+    synchronized (mShipRays) {
+      mShipRays.add(rayshot);
+    }
     if (listener != null) listener.ray();
   }
 
