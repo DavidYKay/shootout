@@ -23,7 +23,9 @@ public class Invader {
   //public static float INVADER_RADIUS = 0.75f;
   public static float INVADER_RADIUS = 1.0f;
   public static float INVADER_VELOCITY = 1;
-  public static int INVADER_POINTS = 40;
+  public static int INVADER_POINTS = 50;
+  public static int SHOT_POINTS = 10;
+
   public final static int STATE_MOVE_LEFT = 0;
   public final static int STATE_MOVE_DOWN = 1;
   public final static int STATE_MOVE_RIGHT = 2;

@@ -157,6 +157,8 @@ rays:
           mShipRays.remove(ray);
           mAlienRays.remove(enemyRay);
           explosions.add(new Explosion(enemyRay.position));
+          score += Invader.SHOT_POINTS;
+
           if (listener != null) listener.explosion();
           continue rays;
         }
