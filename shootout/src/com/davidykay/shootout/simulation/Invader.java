@@ -20,7 +20,8 @@ public class Invader {
   private static final String TAG = "Invader";
   private static final boolean DEBUG = false;
 
-  public static float INVADER_RADIUS = 0.75f;
+  //public static float INVADER_RADIUS = 0.75f;
+  public static float INVADER_RADIUS = 1.0f;
   public static float INVADER_VELOCITY = 1;
   public static int INVADER_POINTS = 40;
   public final static int STATE_MOVE_LEFT = 0;
