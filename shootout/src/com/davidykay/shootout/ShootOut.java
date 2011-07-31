@@ -72,7 +72,7 @@ public class ShootOut implements ApplicationListener {
   @Override public void create () {
     if (!isInitialized) {
       screen = new MainMenu(Gdx.app);
-      Music music = Gdx.audio.newMusic(Gdx.files.getFileHandle("data/8.12.mp3", FileType.Internal));
+      Music music = Gdx.audio.newMusic(Gdx.files.getFileHandle("data/trollface.ogg", FileType.Internal));
       music.setLooping(true);
       //music.play();
       isInitialized = true;
