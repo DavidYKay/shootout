@@ -52,6 +52,10 @@ public class Renderer {
   private static final String TAG = "Renderer";
   /** sprite batch to draw text **/
   private SpriteBatch spriteBatch;
+  /** the moon mesh **/
+  private Mesh moonMesh;
+  /** the moon texture **/
+  private Texture moonTexture;
   /** the ship mesh **/
   private Mesh shipMesh;
   /** the ship texture **/
@@ -95,9 +99,13 @@ public class Renderer {
       spriteBatch = new SpriteBatch();
 
       //InputStream in = Gdx.files.internal("data/ship.obj").read();
-      InputStream in = Gdx.files.internal("data/emplacement.obj").read();
       //InputStream in = Gdx.files.internal("data/cube_01.obj").read();
+      InputStream in = Gdx.files.internal("data/emplacement.obj").read();
       shipMesh = ModelLoaderOld.loadObj(in);
+      in.close();
+
+      in = Gdx.files.internal("data/moon.obj").read();
+      moonMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
       in = Gdx.files.internal("data/invader.obj").read();
@@ -114,8 +122,8 @@ public class Renderer {
 
       rayMesh = shotMesh;
 
+      moonTexture = new Texture(Gdx.files.internal("data/moon.png"), Format.RGB565, true);
       shipTexture = new Texture(Gdx.files.internal("data/battery.png"), Format.RGB565, true);
-      //shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
@@ -184,6 +192,7 @@ public class Renderer {
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
 
+    renderMoon(gl, simulation.ship);
     renderShip(gl, simulation.ship, app);
     renderInvaders(gl, simulation.invaders);
 
@@ -274,6 +283,22 @@ public class Renderer {
     gl.glEnable(GL10.GL_LIGHT0);
     gl.glLightfv(GL10.GL_LIGHT0, GL10.GL_POSITION, direction, 0);
     gl.glEnable(GL10.GL_COLOR_MATERIAL);
+  }
+
+  private void renderMoon (GL10 gl, Ship ship) {
+    moonTexture.bind();
+    gl.glPushMatrix();
+    final float MOON_RADIUS = 10.0f;
+    final float MOON_SCALE  = MOON_RADIUS;
+
+    //gl.glTranslatef(ship.position.x, ship.position.y - MOON_RADIUS, ship.position.z);
+    gl.glTranslatef(0.0f, ship.position.y - MOON_RADIUS, 0.0f);
+    gl.glScalef(MOON_SCALE, MOON_SCALE, MOON_SCALE);
+    //gl.glRotatef(45 * (-app.getInput().getAccelerometerY() / 5), 0, 0, 1);
+    //gl.glRotatef(180, 0, 1, 0);
+
+    moonMesh.render(GL10.GL_TRIANGLES);
+    gl.glPopMatrix();
   }
 
   private void renderShip (GL10 gl, Ship ship, Application app) {

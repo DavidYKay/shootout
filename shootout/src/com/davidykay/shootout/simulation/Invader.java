@@ -18,6 +18,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Invader {
   private static final String TAG = "Invader";
+  private static final boolean DEBUG = false;
 
   public static float INVADER_RADIUS = 0.75f;
   public static float INVADER_VELOCITY = 1;
@@ -64,8 +65,9 @@ public class Invader {
       }
     }
 
-    Gdx.app.log(TAG, String.format("invader moved to: (%s)",
-                             position.toString()
-                             ));
+    if (DEBUG) {
+      Gdx.app.log(TAG, String.format("invader moved to: (%s)",
+                                     position.toString()));
+    }
   }
 }
