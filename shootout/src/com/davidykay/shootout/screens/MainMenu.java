@@ -27,7 +27,7 @@ import com.badlogic.gdx.math.Matrix4;
 
 /**
  * The main menu screen showing a background, the logo of the game and a label telling the user to touch the screen to start the
- * game. Waits for the touch and returns isDone() == true when it's done so that the ochestrating GdxInvaders class can switch to
+ * game. Waits for the touch and returns isDone() == true when it's done so that the ochestrating ShootOut class can switch to
  * the next screen.
  * @author mzechner
  *
@@ -49,7 +49,6 @@ public class MainMenu implements Screen {
 
   public MainMenu (Application app) {
     spriteBatch = new SpriteBatch();
-    //background = new Texture(Gdx.files.internal("data/planet.jpg"));
     background = new Texture(Gdx.files.internal("data/starfield512.png"));
     background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 

@@ -29,7 +29,7 @@ import com.badlogic.gdx.math.Matrix4;
 
 /**
  * The game over screen displays the final score and a game over text and waits for the user to touch the screen in which case it
- * will signal that it is done to the orchestrating GdxInvaders class.
+ * will signal that it is done to the orchestrating ShootOut class.
  * 
  * @author mzechner
  * 

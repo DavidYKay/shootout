@@ -23,7 +23,7 @@ import com.davidykay.shootout.screens.GameOver;
 import com.davidykay.shootout.screens.MainMenu;
 import com.davidykay.shootout.screens.Screen;
 
-public class GdxInvaders implements ApplicationListener {
+public class ShootOut implements ApplicationListener {
   /** flag indicating whether we were initialized already **/
   private boolean isInitialized = false;
 

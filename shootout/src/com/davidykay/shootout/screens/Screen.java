@@ -35,7 +35,7 @@ public interface Screen {
 	public void render (Application app);
 
 	/**
-	 * Called by GdxInvaders to check whether the screen is done.
+	 * Called by ShootOut to check whether the screen is done.
 	 * 
 	 * @return true when the screen is done, false otherwise
 	 */
