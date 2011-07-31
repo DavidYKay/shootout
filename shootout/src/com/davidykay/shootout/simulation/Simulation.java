@@ -45,6 +45,7 @@ public class Simulation {
   public ArrayList<Alien> aliens     = new ArrayList<Alien>();
   public ArrayList<Block> blocks         = new ArrayList<Block>();
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
+  public ArrayList<Explosion> bombExplosions = new ArrayList<Explosion>();
   public Ship ship;
 
   //public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
@@ -149,17 +150,15 @@ public class Simulation {
 
     // Check player shots against computer shots.
 rays:
-    //for (RayShot ray: mShipRays) {
     for (int i = 0; i < mShipRays.size(); i++) {
       RayShot ray = mShipRays.get(i);
-      //for (RayShot enemyRay: mAlienRays) {
       for (int j = 0; j < mAlienRays.size(); j++) {
         RayShot enemyRay = mAlienRays.get(j);
         if (enemyRay.position.dst(ray.position) < ray.radius + enemyRay.radius) {
           // Boom!
           mShipRays.remove(ray);
           mAlienRays.remove(enemyRay);
-          explosions.add(new Explosion(enemyRay.position));
+          bombExplosions.add(new Explosion(enemyRay.position));
           score += Alien.SHOT_POINTS;
 
           if (listener != null) listener.pop();
@@ -182,6 +181,7 @@ rays:
   }
 
   public void updateExplosions (float delta) {
+    //Ship Explosions
     removedExplosions.clear();
     for (int i = 0; i < explosions.size(); i++) {
       Explosion explosion = explosions.get(i);
@@ -191,6 +191,16 @@ rays:
 
     for (int i = 0; i < removedExplosions.size(); i++)
       explosions.remove(removedExplosions.get(i));
+
+    //Bomb Explosions
+    removedExplosions.clear();
+    for (int i = 0; i < bombExplosions.size(); i++) {
+      Explosion explosion = bombExplosions.get(i);
+      explosion.update(delta);
+      if (explosion.aliveTime > Explosion.EXPLOSION_LIVE_TIME) removedExplosions.add(explosion);
+    }
+    for (int i = 0; i < removedExplosions.size(); i++)
+      bombExplosions.remove(removedExplosions.get(i));
   }
 
   private void checkAlienCollision () {

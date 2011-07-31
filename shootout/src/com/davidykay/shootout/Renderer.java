@@ -76,6 +76,8 @@ public class Renderer {
   private Mesh explosionMesh;
   /** the explosion texture **/
   private Texture explosionTexture;
+  /** the bomb explosion texture **/
+  private Texture bombExplosionTexture;
   /** the font **/
   private BitmapFont font;
   /** the rotation angle of all aliens around y **/
@@ -137,8 +139,11 @@ public class Renderer {
       backgroundTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       earthTexture = new Texture(Gdx.files.internal("data/marble128.jpg"), Format.RGB565, true);
       earthTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+
       explosionTexture = new Texture(Gdx.files.internal("data/explode.png"), Format.RGBA4444, true);
       explosionTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      bombExplosionTexture = new Texture(Gdx.files.internal("data/explode-bomb.png"), Format.RGBA4444, true);
+      bombExplosionTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
 
       explosionMesh = new Mesh(true, 4 * 16, 0, new VertexAttribute(Usage.Position, 3, "a_position"),
         new VertexAttribute(Usage.TextureCoordinates, 2, "a_texCoord"));
@@ -217,6 +222,7 @@ public class Renderer {
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
     renderExplosions(gl, simulation.explosions);
+    renderBombExplosions(gl, simulation.bombExplosions);
 
     gl.glDisable(GL10.GL_CULL_FACE);
     gl.glDisable(GL10.GL_DEPTH_TEST);
@@ -417,6 +423,20 @@ public class Renderer {
     gl.glEnable(GL10.GL_BLEND);
     gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
     explosionTexture.bind();
+    for (int i = 0; i < explosions.size(); i++) {
+      Explosion explosion = explosions.get(i);
+      gl.glPushMatrix();
+      gl.glTranslatef(explosion.position.x, explosion.position.y, explosion.position.z);
+      explosionMesh.render(GL10.GL_TRIANGLE_FAN, (int)((explosion.aliveTime / Explosion.EXPLOSION_LIVE_TIME) * 15) * 4, 4);
+      gl.glPopMatrix();
+    }
+    gl.glDisable(GL10.GL_BLEND);
+  }
+
+  private void renderBombExplosions (GL10 gl, ArrayList<Explosion> explosions) {
+    gl.glEnable(GL10.GL_BLEND);
+    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    bombExplosionTexture.bind();
     for (int i = 0; i < explosions.size(); i++) {
       Explosion explosion = explosions.get(i);
       gl.glPushMatrix();
