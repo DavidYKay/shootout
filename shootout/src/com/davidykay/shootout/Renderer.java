@@ -213,7 +213,8 @@ public class Renderer {
     gl.glDisable(GL10.GL_LIGHTING);
 
     //renderShots(gl, simulation.shots);
-    renderRays(gl, simulation.mRays);
+    renderRays(gl, simulation.mRays, true);
+    renderRays(gl, simulation.mShipRays, false);
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
     renderExplosions(gl, simulation.explosions);
@@ -378,19 +379,28 @@ public class Renderer {
     gl.glColor4f(1, 1, 1, 1);
   }
 
-  private void renderRays (GL10 gl, ArrayList<RayShot> rays) {
+  private void renderRays (GL10 gl, ArrayList<RayShot> rays, boolean isInvader) {
     //gl.glColor4f(1, 0, 1, 1);
-    //0, 215, 237
     //gl.glColor4f(1, 0, 1, 1);
-    gl.glColor4f(0, 215/255.0f, 237/255.0f, 1);
+    if (isInvader) {
+      gl.glColor4f(1, 1, 0, 1);
+    } else {
+      //0, 215, 237
+      gl.glColor4f(0, 215/255.0f, 237/255.0f, 1);
+    }
 
     for (int i = 0; i < rays.size(); i++) {
       RayShot ray = rays.get(i);
+      if (ray.isInvaderShot != isInvader) {
+        // Skip incorrect ships.
+        continue;
+      }
       gl.glPushMatrix();
       gl.glTranslatef(ray.position.x, ray.position.y, ray.position.z);
       rayMesh.render(GL10.GL_TRIANGLES);
       gl.glPopMatrix();
     }
+    // Reset color to white?.
     gl.glColor4f(1, 1, 1, 1);
   }
 
