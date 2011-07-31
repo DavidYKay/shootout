@@ -50,6 +50,8 @@ public class GameLoop implements Screen, SimulationListener {
   private final Renderer renderer;
   /** explosion sound **/
   private final Sound explosion;
+  /** pop sound **/
+  private final Sound pop;
   /** shot sound **/
   private final Sound shot;
   /** ray shot sound **/
@@ -60,6 +62,7 @@ public class GameLoop implements Screen, SimulationListener {
     simulation.listener = this;
     renderer = new Renderer(app);
     explosion = app.getAudio().newSound(app.getFiles().getFileHandle("data/Echoing Boom.ogg", FileType.Internal));
+    pop = app.getAudio().newSound(app.getFiles().getFileHandle("data/Dull Pop.ogg", FileType.Internal));
     shot = app.getAudio().newSound(app.getFiles().getFileHandle("data/Mid Laser.ogg", FileType.Internal));
     ray = app.getAudio().newSound(app.getFiles().getFileHandle("data/Long Laser.ogg", FileType.Internal));
   }
@@ -174,6 +177,10 @@ public class GameLoop implements Screen, SimulationListener {
 
   @Override public void explosion () {
     explosion.play();
+  }
+
+  @Override public void pop () {
+    pop.play();
   }
 
   @Override public void shot () {

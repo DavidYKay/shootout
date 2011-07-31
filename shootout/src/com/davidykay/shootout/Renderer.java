@@ -34,13 +34,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g3d.loaders.ModelLoaderOld;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.math.collision.Ray;
+import com.davidykay.shootout.simulation.Alien;
 import com.davidykay.shootout.simulation.Block;
 import com.davidykay.shootout.simulation.Explosion;
-import com.davidykay.shootout.simulation.Alien;
 import com.davidykay.shootout.simulation.RayShot;
 import com.davidykay.shootout.simulation.Ship;
-import com.davidykay.shootout.simulation.Shot;
 import com.davidykay.shootout.simulation.Simulation;
 
 /**
@@ -368,17 +366,17 @@ public class Renderer {
     gl.glDisable(GL10.GL_BLEND);
   }
 
-  private void renderShots (GL10 gl, ArrayList<Shot> shots) {
-    gl.glColor4f(1, 1, 0, 1);
-    for (int i = 0; i < shots.size(); i++) {
-      Shot shot = shots.get(i);
-      gl.glPushMatrix();
-      gl.glTranslatef(shot.position.x, shot.position.y, shot.position.z);
-      shotMesh.render(GL10.GL_TRIANGLES);
-      gl.glPopMatrix();
-    }
-    gl.glColor4f(1, 1, 1, 1);
-  }
+//  private void renderShots (GL10 gl, ArrayList<Shot> shots) {
+//    gl.glColor4f(1, 1, 0, 1);
+//    for (int i = 0; i < shots.size(); i++) {
+//      Shot shot = shots.get(i);
+//      gl.glPushMatrix();
+//      gl.glTranslatef(shot.position.x, shot.position.y, shot.position.z);
+//      shotMesh.render(GL10.GL_TRIANGLES);
+//      gl.glPopMatrix();
+//    }
+//    gl.glColor4f(1, 1, 1, 1);
+//  }
 
   private void renderPlayerRays (GL10 gl, ArrayList<RayShot> rays) {
     //0, 215, 237

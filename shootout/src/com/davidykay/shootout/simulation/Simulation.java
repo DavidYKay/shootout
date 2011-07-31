@@ -11,6 +11,9 @@
  * governing permissions and limitations under the License.
  */
 
+/*
+ * Modified by David Kay for Ludum Dare
+ */
 package com.davidykay.shootout.simulation;
 
 import java.util.ArrayList;
@@ -34,7 +37,7 @@ public class Simulation {
   public final static float PLAYFIELD_MIN_Y = -15;
   public final static float PLAYFIELD_MAX_Y = 2;
 
-  public final static float MAX_SHOTS = 4;
+  public final static float MAX_SHOTS = 8;
 
   private static final String TAG = "Simulation";
   private static final boolean DEBUG = false;
@@ -159,7 +162,7 @@ rays:
           explosions.add(new Explosion(enemyRay.position));
           score += Alien.SHOT_POINTS;
 
-          if (listener != null) listener.explosion();
+          if (listener != null) listener.pop();
           continue rays;
         }
       }
@@ -315,18 +318,20 @@ shots:
   }
 
   public void tapRay(Ray ray) {
-    Vector3 direction = new Vector3(0, 0, -1);
-    RayShot vanilla = new RayShot(ray, false);
-    RayShot custom  = new RayShot(
-            ray.origin,
-            direction,
-            false
-            );
-    RayShot rayshot = vanilla;
-    synchronized (mShipRays) {
-      mShipRays.add(rayshot);
+    if (mShipRays.size() < MAX_SHOTS) {
+      Vector3 direction = new Vector3(0, 0, -1);
+      RayShot vanilla = new RayShot(ray, false);
+      RayShot custom  = new RayShot(
+          ray.origin,
+          direction,
+          false
+          );
+      RayShot rayshot = vanilla;
+      synchronized (mShipRays) {
+        mShipRays.add(rayshot);
+      }
+      if (listener != null) listener.ray();
     }
-    if (listener != null) listener.ray();
   }
 
   //////////////////////////////////////////////////////////////////////

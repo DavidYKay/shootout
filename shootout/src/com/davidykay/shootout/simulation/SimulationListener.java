@@ -16,6 +16,8 @@ package com.davidykay.shootout.simulation;
 public interface SimulationListener {
   public void explosion ();
 
+  public void pop ();
+
   public void shot ();
 
   public void ray ();
