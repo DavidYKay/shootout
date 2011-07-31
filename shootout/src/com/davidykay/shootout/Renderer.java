@@ -114,7 +114,7 @@ public class Renderer {
 
       rayMesh = shotMesh;
 
-      shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
+      shipTexture = new Texture(Gdx.files.internal("data/battery.png"), Format.RGB565, true);
       //shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
