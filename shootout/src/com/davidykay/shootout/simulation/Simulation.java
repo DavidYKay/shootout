@@ -41,11 +41,9 @@ public class Simulation {
 
   public ArrayList<Invader> invaders     = new ArrayList<Invader>();
   public ArrayList<Block> blocks         = new ArrayList<Block>();
-  public ArrayList<Shot> shots           = new ArrayList<Shot>();
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
 
-  public ArrayList<Shot> shipShots = new ArrayList<Shot>();
   public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
   public ArrayList<RayShot> mShipRays = new ArrayList<RayShot>();
   public transient SimulationListener listener;
@@ -53,9 +51,12 @@ public class Simulation {
   public int score;
   public int wave = 1;
 
-  private ArrayList<Shot> removedShots = new ArrayList<Shot>();
   private ArrayList<Explosion> removedExplosions = new ArrayList<Explosion>();
   private ArrayList<RayShot> removedRays = new ArrayList<RayShot>();
+
+  //////////////////////////////////////////////////////////////////////
+  // Initialization
+  //////////////////////////////////////////////////////////////////////
 
   public Simulation () {
     populate();
@@ -91,10 +92,13 @@ public class Simulation {
     //}
   }
 
+  //////////////////////////////////////////////////////////////////////
+  // Game Logic
+  //////////////////////////////////////////////////////////////////////
+
   public void update (float delta) {
     ship.update(delta);
     updateInvaders(delta);
-    updateShots(delta);
     updateRays(delta);
     updateExplosions(delta);
     checkShipCollision();
@@ -108,31 +112,6 @@ public class Simulation {
       Invader invader = invaders.get(i);
       invader.update(delta, multiplier);
     }
-  }
-
-  private void updateShots (float delta) {
-    removedShots.clear();
-    for (int i = 0; i < shots.size(); i++) {
-      Shot shot = shots.get(i);
-      shot.update(delta);
-      if (shot.hasLeftField) removedShots.add(shot);
-    }
-
-    for (int i = 0; i < removedShots.size(); i++) {
-      Shot shot = removedShots.get(i);
-      shots.remove(shot);
-      if (!shot.isInvaderShot) {
-        shipShots.remove(shot);
-      }
-    }
-
-    // Invader shots.
-    //if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
-    //  int index = (int)(Math.random() * (invaders.size() - 1));
-    //  Shot shot = new Shot(invaders.get(index).position, true);
-    //  shots.add(shot);
-    //  if (listener != null) listener.shot();
-    //}
   }
 
   private void updateRays (float delta) {
@@ -162,27 +141,13 @@ public class Simulation {
   }
 
   private void checkInvaderCollision () {
-    //if (shipShot == null) return;
-    if (shipShots.isEmpty() && mRays.isEmpty()) return;
+    if ( mRays.isEmpty()) return;
 
     // Brute force collision detection.
 invaders:
     for (int j = 0; j < invaders.size(); j++) {
       Invader invader = invaders.get(j);
 shots:
-      for (Shot shipShot : shipShots) {
-        if (invader.position.dst(shipShot.position) < Invader.INVADER_RADIUS) {
-          // Remove this shot from both the ship shots and the total shots.
-          shipShots.remove(shipShot);
-          shots.remove(shipShot);
-          invaders.remove(invader);
-          explosions.add(new Explosion(invader.position));
-          if (listener != null) listener.explosion();
-          score += Invader.INVADER_POINTS;
-          // Go to the next invader.
-          break invaders;
-        }
-      }
       for (RayShot ray : mRays) {
         if (invader.position.dst(ray.position) < Invader.INVADER_RADIUS) {
           mRays.remove(ray);
@@ -199,27 +164,6 @@ shots:
   }
 
   private void checkShipCollision () {
-    removedShots.clear();
-
-    if (!ship.isExploding) {
-      for (int i = 0; i < shots.size(); i++) {
-        Shot shot = shots.get(i);
-        if (!shot.isInvaderShot) continue;
-
-        if (ship.position.dst(shot.position) < Ship.SHIP_RADIUS) {
-          removedShots.add(shot);
-          shot.hasLeftField = true;
-          ship.lives--;
-          ship.isExploding = true;
-          explosions.add(new Explosion(ship.position));
-          if (listener != null) listener.explosion();
-          break;
-        }
-      }
-
-      for (int i = 0; i < removedShots.size(); i++)
-        shots.remove(removedShots.get(i));
-    }
 
     for (int i = 0; i < invaders.size(); i++) {
       Invader invader = invaders.get(i);
@@ -236,30 +180,6 @@ shots:
   }
 
   private void checkBlockCollision () {
-    removedShots.clear();
-
-    for (int i = 0; i < shots.size(); i++) {
-      Shot shot = shots.get(i);
-
-      for (int j = 0; j < blocks.size(); j++) {
-        Block block = blocks.get(j);
-        if (block.position.dst(shot.position) < Block.BLOCK_RADIUS) {
-          removedShots.add(shot);
-          shot.hasLeftField = true;
-          blocks.remove(block);
-          break;
-        }
-      }
-    }
-
-    for (int i = 0; i < removedShots.size(); i++) {
-      Shot shot = removedShots.get(i);
-      if (!shot.isInvaderShot) {
-        shipShots.remove(shot);
-      }
-      shots.remove(shot);
-    }
-
     //for (RayShot ray : mRays) {
     for (int i = 0; i < mRays.size(); i++) {
       RayShot ray = mRays.get(i);
@@ -277,9 +197,8 @@ shots:
   private void checkNextLevel () {
     if (invaders.size() == 0 && ship.lives > 0) {
       blocks.clear();
-      shots.clear();
-      //shipShot = null;
-      shipShots.clear();
+      mRays.clear();
+      mShipRays.clear();
       Vector3 shipPosition = ship.position;
       int lives = ship.lives;
       populate();
@@ -289,6 +208,10 @@ shots:
       wave++;
     }
   }
+
+  //////////////////////////////////////////////////////////////////////
+  // Player Input
+  //////////////////////////////////////////////////////////////////////
 
   public void moveShipLeft (float delta, float scale) {
     if (ship.isExploding) return;
@@ -314,38 +237,6 @@ shots:
     //                         ship.position.z));
   }
 
-  ///**
-  // * Vanilla shot coming from the default position.
-  // */
-  //public void shot () {
-  //  if (shipShot == null && !ship.isExploding) {
-  //    shipShot = new Shot(ship.position, false);
-  //    Gdx.app.log(TAG, String.format("shot(%s)",
-  //                                   ship.position.toString()
-  //                                  ));
-  //    shots.add(shipShot);
-  //    if (listener != null) listener.shot();
-  //  }
-  //}
-
-  /**
-   * Shot appearing at the user's fingertip.
-   */
-  public void tapShot (Vector3 vector) {
-    //if (shipShot == null && !ship.isExploding) {
-    if (!ship.isExploding && shipShots.size() < MAX_SHOTS) {
-      Shot shot = new Shot(vector, false);
-      Gdx.app.log(TAG, String.format("tapShot(%s)",
-                                     vector.toString()));
-      shots.add(shot);
-      shipShots.add(shot);
-      if (listener != null) listener.shot();
-    } else {
-      Gdx.app.log(TAG, String.format("Couldn't shoot. shipShots: %d",
-                                     shipShots.size()));
-    }
-  }
-
   public void tapRay(Ray ray) {
     Vector3 direction = new Vector3(0, 0, -1);
     RayShot vanilla = new RayShot(ray, false);
@@ -358,6 +249,10 @@ shots:
     mRays.add(rayshot);
     if (listener != null) listener.ray();
   }
+
+  //////////////////////////////////////////////////////////////////////
+  // Orientation Logic
+  //////////////////////////////////////////////////////////////////////
 
   private LinkedList<Orientation> mOrientations = new LinkedList<Orientation>();
   private static final int MAX_ORIENTATIONS = 15;

@@ -176,7 +176,7 @@ public class Renderer {
       }
 
       explosionMesh.setVertices(vertices);
-      font = new BitmapFont(Gdx.files.internal("data/font10.fnt"), Gdx.files.internal("data/font10.png"), false);
+      font = new BitmapFont(Gdx.files.internal(ShootOut.FONT10_FNT), Gdx.files.internal(ShootOut.FONT10_PNG), false);
 
       camera = new PerspectiveCamera(67, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     } catch (Exception ex) {
@@ -211,8 +211,8 @@ public class Renderer {
     renderBlocks(gl, simulation.blocks);
 
     gl.glDisable(GL10.GL_LIGHTING);
-    renderShots(gl, simulation.shots);
 
+    //renderShots(gl, simulation.shots);
     renderRays(gl, simulation.mRays);
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
