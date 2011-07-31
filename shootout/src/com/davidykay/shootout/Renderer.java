@@ -132,6 +132,8 @@ public class Renderer {
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       backgroundTexture = new Texture(Gdx.files.internal("data/starfield512.png"), Format.RGB565, true);
       backgroundTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      earthTexture = new Texture(Gdx.files.internal("data/marble128.jpg"), Format.RGB565, true);
+      earthTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       explosionTexture = new Texture(Gdx.files.internal("data/explode.png"), Format.RGBA4444, true);
       explosionTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
 
@@ -183,6 +185,7 @@ public class Renderer {
     gl.glViewport(0, 0, app.getGraphics().getWidth(), app.getGraphics().getHeight());
 
     renderBackground(gl);
+    renderEarth(gl);
 
     gl.glDisable(GL10.GL_DITHER);
     gl.glEnable(GL10.GL_DEPTH_TEST);
@@ -232,6 +235,7 @@ public class Renderer {
   }
 
   private void renderBackground (GL10 gl) {
+    // TODO: Eliminate fixed number ortho projection.
     //viewMatrix.setToOrtho2D(0, 0, 400, 320);
     viewMatrix.setToOrtho2D(0, 0, 480, 320);
     spriteBatch.setProjectionMatrix(viewMatrix);
@@ -240,6 +244,19 @@ public class Renderer {
     spriteBatch.disableBlending();
     spriteBatch.setColor(Color.WHITE);
     spriteBatch.draw(backgroundTexture, 0, 0, 480, 320, 0, 0, 512, 512, false, false);
+    spriteBatch.end();
+  }
+
+  private void renderEarth (GL10 gl) {
+    // TODO: Eliminate fixed number ortho projection.
+    final int TEXTURE_SIZE = 128;
+    viewMatrix.setToOrtho2D(0, 0, 480, 320);
+    spriteBatch.setProjectionMatrix(viewMatrix);
+    spriteBatch.setTransformMatrix(transformMatrix);
+    spriteBatch.begin();
+    spriteBatch.disableBlending();
+    spriteBatch.setColor(Color.WHITE);
+    spriteBatch.draw(earthTexture, 288, 48, TEXTURE_SIZE, TEXTURE_SIZE, 0, 0, TEXTURE_SIZE, TEXTURE_SIZE, false, false);
     spriteBatch.end();
   }
 
