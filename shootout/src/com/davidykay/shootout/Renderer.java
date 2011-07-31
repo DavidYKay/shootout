@@ -100,8 +100,6 @@ public class Renderer {
     try {
       spriteBatch = new SpriteBatch();
 
-      //InputStream in = Gdx.files.internal("data/ship.obj").read();
-      //InputStream in = Gdx.files.internal("data/cube_01.obj").read();
       InputStream in = Gdx.files.internal("data/emplacement.obj").read();
       shipMesh = ModelLoaderOld.loadObj(in);
       in.close();
