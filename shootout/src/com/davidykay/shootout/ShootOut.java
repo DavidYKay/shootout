@@ -82,7 +82,7 @@ public class ShootOut implements ApplicationListener {
       screen = new MainMenu(Gdx.app);
       Music music = Gdx.audio.newMusic(Gdx.files.getFileHandle("data/trollface.ogg", FileType.Internal));
       music.setLooping(true);
-      //music.play();
+      music.play();
       isInitialized = true;
     }
   }
