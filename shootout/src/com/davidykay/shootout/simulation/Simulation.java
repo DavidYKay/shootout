@@ -329,6 +329,7 @@ shots:
         vanilla
         //custom
     );
+    if (listener != null) listener.ray();
   }
 
   private LinkedList<Orientation> mOrientations = new LinkedList<Orientation>();
