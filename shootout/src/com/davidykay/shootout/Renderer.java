@@ -94,7 +94,8 @@ public class Renderer {
     try {
       spriteBatch = new SpriteBatch();
 
-      InputStream in = Gdx.files.internal("data/ship.obj").read();
+      //InputStream in = Gdx.files.internal("data/ship.obj").read();
+      InputStream in = Gdx.files.internal("data/emplacement.obj").read();
       //InputStream in = Gdx.files.internal("data/cube_01.obj").read();
       shipMesh = ModelLoaderOld.loadObj(in);
       in.close();
@@ -113,8 +114,8 @@ public class Renderer {
 
       rayMesh = shotMesh;
 
-      //shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
-      shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
+      shipTexture = new Texture(Gdx.files.internal("data/ship.png"), Format.RGB565, true);
+      //shipTexture = new Texture(Gdx.files.internal("data/stripes.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
