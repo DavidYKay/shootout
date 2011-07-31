@@ -24,6 +24,14 @@ import com.davidykay.shootout.screens.MainMenu;
 import com.davidykay.shootout.screens.Screen;
 
 public class ShootOut implements ApplicationListener {
+  public static final String BACKGROUND = "data/starfield512.png";
+  public static final String TITLE = "data/title.png";
+
+  public static final String FONT_FNT = "data/font16.fnt";
+  public static final String FONT_PNG = "data/font16.png";
+  public static final String FONT10_FNT = "data/font10.fnt";
+  public static final String FONT10_PNG = "data/font10.png";
+
   /** flag indicating whether we were initialized already **/
   private boolean isInitialized = false;
 

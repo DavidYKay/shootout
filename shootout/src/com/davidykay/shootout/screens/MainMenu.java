@@ -14,16 +14,15 @@
 package com.davidykay.shootout.screens;
 
 import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.Texture.TextureWrap;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
+import com.davidykay.shootout.ShootOut;
 
 /**
  * The main menu screen showing a background, the logo of the game and a label telling the user to touch the screen to start the
@@ -49,13 +48,13 @@ public class MainMenu implements Screen {
 
   public MainMenu (Application app) {
     spriteBatch = new SpriteBatch();
-    background = new Texture(Gdx.files.internal("data/starfield512.png"));
+    background = new Texture(Gdx.files.internal(ShootOut.BACKGROUND));
     background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-    logo = new Texture(Gdx.files.internal("data/title.png"));
+    logo = new Texture(Gdx.files.internal(ShootOut.TITLE));
     logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
-    font = new BitmapFont(Gdx.files.internal("data/font16.fnt"), Gdx.files.internal("data/font16.png"), false);
+    font = new BitmapFont(Gdx.files.internal(ShootOut.FONT_FNT), Gdx.files.internal(ShootOut.FONT_PNG), false);
   }
 
   @Override public void render (Application app) {

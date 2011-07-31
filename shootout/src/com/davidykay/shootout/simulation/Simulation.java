@@ -37,6 +37,7 @@ public class Simulation {
   public final static float MAX_SHOTS = 4;
 
   private static final String TAG = "Simulation";
+  private static final boolean DEBUG = false;
 
   public ArrayList<Invader> invaders     = new ArrayList<Invader>();
   public ArrayList<Block> blocks         = new ArrayList<Block>();
@@ -398,8 +399,10 @@ shots:
     // Average out our values
     averageOrientationValues();
 
-    Gdx.app.log(TAG, String.format("Orientation: (%s)",
-                                   orientation.toString()));
+    if (DEBUG) {
+      Gdx.app.log(TAG, String.format("Orientation: (%s)",
+                                     orientation.toString()));
+    }
   }
 
   /**
