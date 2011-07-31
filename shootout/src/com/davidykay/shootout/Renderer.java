@@ -110,7 +110,8 @@ public class Renderer {
       moonMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
-      in = Gdx.files.internal("data/invader.obj").read();
+      //in = Gdx.files.internal("data/invader.obj").read();
+      in = Gdx.files.internal("data/ufo.obj").read();
       invaderMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
@@ -128,8 +129,12 @@ public class Renderer {
       moonTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       shipTexture = new Texture(Gdx.files.internal("data/battery.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
-      invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
-      invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+
+      //invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
+      invaderTexture = new Texture(Gdx.files.internal("data/ufo.png"), Format.RGB565, true);
+      //invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      //invaderTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
       backgroundTexture = new Texture(Gdx.files.internal("data/starfield512.png"), Format.RGB565, true);
       backgroundTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       earthTexture = new Texture(Gdx.files.internal("data/marble128.jpg"), Format.RGB565, true);
