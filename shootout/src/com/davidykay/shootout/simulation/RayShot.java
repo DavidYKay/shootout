@@ -25,19 +25,9 @@ public class RayShot {
   }
 
   public void update (float delta) {
-    //if (isInvaderShot) {
-    //  position.z += SHOT_VELOCITY * delta;
-    //}
-    //else
-    //  position.z -= SHOT_VELOCITY * delta;
-
     position.x += direction.x * SHOT_VELOCITY * delta;
     position.y += direction.y * SHOT_VELOCITY * delta;
     position.z += direction.z * SHOT_VELOCITY * delta;
-
-    //position.x += direction.x * delta;
-    //position.y += direction.y * delta;
-    //position.z += direction.z * delta;
 
     Gdx.app.log(TAG, String.format("rayShot moving to: (%f, %f, %f)",
                              position.x,

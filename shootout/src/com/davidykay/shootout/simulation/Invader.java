@@ -13,11 +13,13 @@
 
 package com.davidykay.shootout.simulation;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector3;
 
 public class Invader {
-  //public static float INVADER_RADIUS = 0.75f;
-  public static float INVADER_RADIUS = 7.5f;
+  private static final String TAG = "Invader";
+
+  public static float INVADER_RADIUS = 0.75f;
   public static float INVADER_VELOCITY = 1;
   public static int INVADER_POINTS = 40;
   public final static int STATE_MOVE_LEFT = 0;
@@ -61,5 +63,9 @@ public class Invader {
         movedDistance = 0;
       }
     }
+
+    Gdx.app.log(TAG, String.format("invader moved to: (%s)",
+                             position.toString()
+                             ));
   }
 }

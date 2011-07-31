@@ -23,6 +23,9 @@ import com.badlogic.gdx.math.collision.Ray;
 
 public class Simulation {
 
+  public final static float ENEMY_ROWS    = 4;
+  public final static float ENEMY_COLUMNS = 8;
+
   public final static float PLAYFIELD_MIN_X = -14;
   public final static float PLAYFIELD_MAX_X = 14;
   public final static float PLAYFIELD_MIN_Z = -15;
@@ -61,8 +64,8 @@ public class Simulation {
     ship = new Ship();
 
     Random random = new Random();
-    for (int row = 0; row < 4; row++) {
-      for (int column = 0; column < 8; column++) {
+    for (int row = 0; row < ENEMY_ROWS; row++) {
+      for (int column = 0; column < ENEMY_COLUMNS; column++) {
         Invader invader = new Invader(
             new Vector3(
                 //-PLAYFIELD_MAX_X / 2 + column * 2f,
@@ -158,10 +161,9 @@ public class Simulation {
 
   private void checkInvaderCollision () {
     //if (shipShot == null) return;
-    if (shipShots.isEmpty()) return;
+    if (shipShots.isEmpty() && mRays.isEmpty()) return;
 
     // Brute force collision detection.
-
 invaders:
     for (int j = 0; j < invaders.size(); j++) {
       Invader invader = invaders.get(j);
