@@ -43,6 +43,7 @@ public class Simulation {
 
   public ArrayList<Shot> shipShots = new ArrayList<Shot>();
   public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
+  public ArrayList<RayShot> mShipRays = new ArrayList<RayShot>();
   public transient SimulationListener listener;
   public float multiplier = 1;
   public int score;
@@ -170,11 +171,22 @@ shots:
           // Remove this shot from both the ship shots and the total shots.
           shipShots.remove(shipShot);
           shots.remove(shipShot);
-          //shipShot = null;
           invaders.remove(invader);
           explosions.add(new Explosion(invader.position));
           if (listener != null) listener.explosion();
           score += Invader.INVADER_POINTS;
+          // Go to the next invader.
+          break invaders;
+        }
+      }
+      for (RayShot ray : mRays) {
+        if (invader.position.dst(ray.position) < Invader.INVADER_RADIUS) {
+          mRays.remove(ray);
+          invaders.remove(invader);
+          explosions.add(new Explosion(invader.position));
+          if (listener != null) listener.explosion();
+          score += Invader.INVADER_POINTS;
+
           // Go to the next invader.
           break invaders;
         }
@@ -242,6 +254,19 @@ shots:
         shipShots.remove(shot);
       }
       shots.remove(shot);
+    }
+
+    //for (RayShot ray : mRays) {
+    for (int i = 0; i < mRays.size(); i++) {
+      RayShot ray = mRays.get(i);
+      for (int j = 0; j < blocks.size(); j++) {
+        Block block = blocks.get(j);
+        if (block.position.dst(ray.position) < Block.BLOCK_RADIUS) {
+          mRays.remove(ray);
+          blocks.remove(block);
+          break;
+        }
+      }
     }
   }
 
@@ -325,10 +350,8 @@ shots:
             direction,
             false
             );
-    mRays.add(
-        vanilla
-        //custom
-    );
+    RayShot rayshot = vanilla;
+    mRays.add(rayshot);
     if (listener != null) listener.ray();
   }
 
