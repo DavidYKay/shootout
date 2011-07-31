@@ -49,7 +49,8 @@ public class MainMenu implements Screen {
 
   public MainMenu (Application app) {
     spriteBatch = new SpriteBatch();
-    background = new Texture(Gdx.files.internal("data/planet.jpg"));
+    //background = new Texture(Gdx.files.internal("data/planet.jpg"));
+    background = new Texture(Gdx.files.internal("data/starfield512.png"));
     background.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
     logo = new Texture(Gdx.files.internal("data/title.png"));
@@ -71,7 +72,7 @@ public class MainMenu implements Screen {
     spriteBatch.enableBlending();
     spriteBatch.draw(logo, 0, 320-128, 480, 128, 0, 0, 512, 256, false, false);
     spriteBatch.setBlendFunction(GL10.GL_ONE, GL10.GL_ONE_MINUS_SRC_ALPHA);
-    String text = "Touch screen to start!";
+    String text = "Touch to start!";
     float width = font.getBounds(text).width;
     font.draw(spriteBatch, text, 240 - width / 2, 128);
     spriteBatch.end();
