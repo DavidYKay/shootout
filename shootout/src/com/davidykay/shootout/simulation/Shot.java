@@ -18,16 +18,16 @@ import com.badlogic.gdx.math.Vector3;
 public class Shot {
   public static float SHOT_VELOCITY = 10;
   public final Vector3 position = new Vector3();
-  public boolean isInvaderShot;
+  public boolean isAlienShot;
   public boolean hasLeftField = false;
 
-  public Shot (Vector3 position, boolean isInvaderShot) {
+  public Shot (Vector3 position, boolean isAlienShot) {
     this.position.set(position);
-    this.isInvaderShot = isInvaderShot;
+    this.isAlienShot = isAlienShot;
   }
 
   public void update (float delta) {
-    if (isInvaderShot)
+    if (isAlienShot)
       position.z += SHOT_VELOCITY * delta;
     else
       position.z -= SHOT_VELOCITY * delta;

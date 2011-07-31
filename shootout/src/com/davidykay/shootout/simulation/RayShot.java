@@ -18,19 +18,19 @@ public class RayShot {
   public final Vector3 position = new Vector3();
   /** A unit vector which shows our current direction. */
   public final Vector3 direction = new Vector3();
-  public boolean isInvaderShot;
+  public boolean isAlienShot;
   public boolean hasLeftField = false;
 
-  public RayShot (Ray ray, boolean isInvaderShot) {
-    this(ray.origin, ray.direction, isInvaderShot);
+  public RayShot (Ray ray, boolean isAlienShot) {
+    this(ray.origin, ray.direction, isAlienShot);
   }
 
-  public RayShot (Vector3 position, Vector3 direction, boolean isInvaderShot) {
+  public RayShot (Vector3 position, Vector3 direction, boolean isAlienShot) {
     this.position.set(position);
     this.direction.set(direction);
-    this.isInvaderShot = isInvaderShot;
-    this.shotVelocity = isInvaderShot ? ALIEN_SHOT_VELOCITY : PLAYER_SHOT_VELOCITY;
-    this.radius       = isInvaderShot ? ALIEN_SHOT_RADIUS : PLAYER_SHOT_RADIUS;
+    this.isAlienShot = isAlienShot;
+    this.shotVelocity = isAlienShot ? ALIEN_SHOT_VELOCITY : PLAYER_SHOT_VELOCITY;
+    this.radius       = isAlienShot ? ALIEN_SHOT_RADIUS : PLAYER_SHOT_RADIUS;
   }
 
   public void update (float delta) {

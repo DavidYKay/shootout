@@ -145,7 +145,7 @@ public class GameLoop implements Screen, SimulationListener {
 
         finalVector = new Vector3(nearVector);
 
-        //for (Invader invader : invaders) {
+        //for (Alien alien : aliens) {
         //  if (
         //      Intersector.intersectRayPlane(
         //          pickRay,

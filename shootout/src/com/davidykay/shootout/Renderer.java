@@ -37,7 +37,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.Ray;
 import com.davidykay.shootout.simulation.Block;
 import com.davidykay.shootout.simulation.Explosion;
-import com.davidykay.shootout.simulation.Invader;
+import com.davidykay.shootout.simulation.Alien;
 import com.davidykay.shootout.simulation.RayShot;
 import com.davidykay.shootout.simulation.Ship;
 import com.davidykay.shootout.simulation.Shot;
@@ -60,10 +60,10 @@ public class Renderer {
   private Mesh shipMesh;
   /** the ship texture **/
   private Texture shipTexture;
-  /** the invader mesh **/
-  private Mesh invaderMesh;
-  /** the invader texture **/
-  private Texture invaderTexture;
+  /** the alien mesh **/
+  private Mesh alienMesh;
+  /** the alien texture **/
+  private Texture alienTexture;
   /** the block mesh **/
   private Mesh blockMesh;
   /** the shot mesh **/
@@ -80,8 +80,8 @@ public class Renderer {
   private Texture explosionTexture;
   /** the font **/
   private BitmapFont font;
-  /** the rotation angle of all invaders around y **/
-  private float invaderAngle = 0;
+  /** the rotation angle of all aliens around y **/
+  private float alienAngle = 0;
   /** status string **/
   private String status = "";
   /** keeping track of the last score so we don't constantly construct a new string **/
@@ -108,9 +108,9 @@ public class Renderer {
       moonMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
-      //in = Gdx.files.internal("data/invader.obj").read();
+      //in = Gdx.files.internal("data/alien.obj").read();
       in = Gdx.files.internal("data/ufo.obj").read();
-      invaderMesh = ModelLoaderOld.loadObj(in);
+      alienMesh = ModelLoaderOld.loadObj(in);
       in.close();
 
       in = Gdx.files.internal("data/block.obj").read();
@@ -130,10 +130,10 @@ public class Renderer {
       shipTexture = new Texture(Gdx.files.internal("data/battery.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
 
-      //invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
-      invaderTexture = new Texture(Gdx.files.internal("data/ufo.png"), Format.RGB565, true);
-      //invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
-      //invaderTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+      //alienTexture = new Texture(Gdx.files.internal("data/alien.png"), Format.RGB565, true);
+      alienTexture = new Texture(Gdx.files.internal("data/ufo.png"), Format.RGB565, true);
+      //alienTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      //alienTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
       backgroundTexture = new Texture(Gdx.files.internal("data/starfield512.png"), Format.RGB565, true);
       backgroundTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
@@ -205,7 +205,7 @@ public class Renderer {
 
     renderMoon(gl, simulation.ship);
     renderShip(gl, simulation.ship, app);
-    renderInvaders(gl, simulation.invaders);
+    renderAliens(gl, simulation.aliens);
 
     gl.glDisable(GL10.GL_TEXTURE_2D);
     renderBlocks(gl, simulation.blocks);
@@ -237,8 +237,8 @@ public class Renderer {
     font.draw(spriteBatch, status, 0, 320);
     spriteBatch.end();
 
-    invaderAngle += app.getGraphics().getDeltaTime() * 90;
-    if (invaderAngle > 360) invaderAngle -= 360;
+    alienAngle += app.getGraphics().getDeltaTime() * 90;
+    if (alienAngle > 360) alienAngle -= 360;
   }
 
   private void renderBackground (GL10 gl) {
@@ -341,14 +341,14 @@ public class Renderer {
     gl.glPopMatrix();
   }
 
-  private void renderInvaders (GL10 gl, ArrayList<Invader> invaders) {
-    invaderTexture.bind();
-    for (int i = 0; i < invaders.size(); i++) {
-      Invader invader = invaders.get(i);
+  private void renderAliens (GL10 gl, ArrayList<Alien> aliens) {
+    alienTexture.bind();
+    for (int i = 0; i < aliens.size(); i++) {
+      Alien alien = aliens.get(i);
       gl.glPushMatrix();
-      gl.glTranslatef(invader.position.x, invader.position.y, invader.position.z);
-      gl.glRotatef(invaderAngle, 0, 1, 0);
-      invaderMesh.render(GL10.GL_TRIANGLES);
+      gl.glTranslatef(alien.position.x, alien.position.y, alien.position.z);
+      gl.glRotatef(alienAngle, 0, 1, 0);
+      alienMesh.render(GL10.GL_TRIANGLES);
       gl.glPopMatrix();
     }
   }
@@ -448,13 +448,13 @@ public class Renderer {
   public void dispose () {
     spriteBatch.dispose();
     shipTexture.dispose();
-    invaderTexture.dispose();
+    alienTexture.dispose();
     backgroundTexture.dispose();
     explosionTexture.dispose();
     font.dispose();
     explosionMesh.dispose();
     shipMesh.dispose();
-    invaderMesh.dispose();
+    alienMesh.dispose();
     shotMesh.dispose();
     blockMesh.dispose();
   }

@@ -39,7 +39,7 @@ public class Simulation {
   private static final String TAG = "Simulation";
   private static final boolean DEBUG = false;
 
-  public ArrayList<Invader> invaders     = new ArrayList<Invader>();
+  public ArrayList<Alien> aliens     = new ArrayList<Alien>();
   public ArrayList<Block> blocks         = new ArrayList<Block>();
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
@@ -73,14 +73,14 @@ public class Simulation {
 
     for (int row = 0; row < ENEMY_ROWS; row++) {
       for (int column = 0; column < ENEMY_COLUMNS; column++) {
-        Invader invader = new Invader(
+        Alien alien = new Alien(
             new Vector3(
                 -PLAYFIELD_MAX_X / 2 + column * COLUMN_SIZE,
                 random.nextInt(6),
                 PLAYFIELD_MIN_Z + row * ROW_SIZE
             )
         );
-        invaders.add(invader);
+        aliens.add(alien);
       }
     }
 
@@ -100,11 +100,11 @@ public class Simulation {
   public void update (float delta) {
     synchronized (mShipRays) {
       ship.update(delta);
-      updateInvaders(delta);
+      updateAliens(delta);
       updateRays(delta);
       updateExplosions(delta);
       checkShipCollision();
-      checkInvaderCollision();
+      checkAlienCollision();
       //checkBlockCollision();
       checkNextLevel();
       //synchronized (mShipRays) {
@@ -112,10 +112,10 @@ public class Simulation {
     }
   }
 
-  private void updateInvaders (float delta) {
-    for (int i = 0; i < invaders.size(); i++) {
-      Invader invader = invaders.get(i);
-      invader.update(delta, multiplier);
+  private void updateAliens (float delta) {
+    for (int i = 0; i < aliens.size(); i++) {
+      Alien alien = aliens.get(i);
+      alien.update(delta, multiplier);
     }
   }
 
@@ -137,7 +137,7 @@ public class Simulation {
     //for (RayShot ray : removedRays) {
     for (int i = 0; i < removedRays.size(); i++) {
       RayShot ray = removedRays.get(i);
-      if (ray.isInvaderShot) {
+      if (ray.isAlienShot) {
         mAlienRays.remove(ray);
       } else {
         mShipRays.remove(ray);
@@ -157,7 +157,7 @@ rays:
           mShipRays.remove(ray);
           mAlienRays.remove(enemyRay);
           explosions.add(new Explosion(enemyRay.position));
-          score += Invader.SHOT_POINTS;
+          score += Alien.SHOT_POINTS;
 
           if (listener != null) listener.explosion();
           continue rays;
@@ -166,9 +166,9 @@ rays:
     }
 
     // UFOs shoot!
-    if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
-      int index = (int)(Math.random() * (invaders.size() - 1));
-      Vector3 position = invaders.get(index).position;
+    if (Math.random() < 0.01 * multiplier && aliens.size() > 0) {
+      int index = (int)(Math.random() * (aliens.size() - 1));
+      Vector3 position = aliens.get(index).position;
       Vector3 direction = new Vector3(0,0,0).sub(position).nor();
       RayShot shot = new RayShot(position,
                                  direction,
@@ -190,25 +190,25 @@ rays:
       explosions.remove(removedExplosions.get(i));
   }
 
-  private void checkInvaderCollision () {
+  private void checkAlienCollision () {
     //if (mRays.isEmpty()) return;
     if (mShipRays.isEmpty()) return;
 
     // Brute force collision detection.
-invaders:
-    for (int j = 0; j < invaders.size(); j++) {
-      Invader invader = invaders.get(j);
+aliens:
+    for (int j = 0; j < aliens.size(); j++) {
+      Alien alien = aliens.get(j);
 shots:
       for (RayShot ray : mShipRays) {
-        if (invader.position.dst(ray.position) < Invader.INVADER_RADIUS) {
+        if (alien.position.dst(ray.position) < Alien.ALIEN_RADIUS) {
           mShipRays.remove(ray);
-          invaders.remove(invader);
-          explosions.add(new Explosion(invader.position));
+          aliens.remove(alien);
+          explosions.add(new Explosion(alien.position));
           if (listener != null) listener.explosion();
-          score += Invader.INVADER_POINTS;
+          score += Alien.ALIEN_POINTS;
 
-          // Go to the next invader.
-          break invaders;
+          // Go to the next alien.
+          break aliens;
         }
       }
     }
@@ -231,13 +231,13 @@ shots:
     }
 
     // Check for collision with ufos.
-    for (int i = 0; i < invaders.size(); i++) {
-      Invader invader = invaders.get(i);
-      if (invader.position.dst(ship.position) < Ship.SHIP_RADIUS) {
+    for (int i = 0; i < aliens.size(); i++) {
+      Alien alien = aliens.get(i);
+      if (alien.position.dst(ship.position) < Ship.SHIP_RADIUS) {
         ship.lives--;
-        invaders.remove(invader);
+        aliens.remove(alien);
         ship.isExploding = true;
-        explosions.add(new Explosion(invader.position));
+        explosions.add(new Explosion(alien.position));
         explosions.add(new Explosion(ship.position));
         if (listener != null) listener.explosion();
         break;
@@ -261,7 +261,7 @@ shots:
   //}
 
   private void checkNextLevel () {
-    if (invaders.size() == 0 && ship.lives > 0) {
+    if (aliens.size() == 0 && ship.lives > 0) {
       blocks.clear();
       //mRays.clear();
       mAlienRays.clear();
