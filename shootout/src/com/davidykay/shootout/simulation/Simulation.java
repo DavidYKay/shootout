@@ -124,7 +124,9 @@ public class Simulation {
 
     ArrayList<RayShot> rays = getAllRays();
 
-    for (RayShot ray : rays) {
+    //for (RayShot ray : rays) {
+    for (int i = 0; i < rays.size(); i++) {
+      RayShot ray = rays.get(i);
       // Move.
       ray.update(delta);
       // If they've left the building, remove.
@@ -132,7 +134,9 @@ public class Simulation {
     }
 
     // Clear up removed
-    for (RayShot ray : removedRays) {
+    //for (RayShot ray : removedRays) {
+    for (int i = 0; i < removedRays.size(); i++) {
+      RayShot ray = removedRays.get(i);
       if (ray.isInvaderShot) {
         mAlienRays.remove(ray);
       } else {
@@ -142,8 +146,12 @@ public class Simulation {
 
     // Check player shots against computer shots.
 rays:
-    for (RayShot ray: mShipRays) {
-      for (RayShot enemyRay: mAlienRays) {
+    //for (RayShot ray: mShipRays) {
+    for (int i = 0; i < mShipRays.size(); i++) {
+      RayShot ray = mShipRays.get(i);
+      //for (RayShot enemyRay: mAlienRays) {
+      for (int j = 0; j < mAlienRays.size(); j++) {
+        RayShot enemyRay = mAlienRays.get(j);
         if (enemyRay.position.dst(ray.position) < ray.radius + enemyRay.radius) {
           // Boom!
           mShipRays.remove(ray);
