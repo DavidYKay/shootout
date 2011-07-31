@@ -73,9 +73,6 @@ public class Simulation {
       for (int column = 0; column < ENEMY_COLUMNS; column++) {
         Invader invader = new Invader(
             new Vector3(
-                //-PLAYFIELD_MAX_X / 2 + column * 2f,
-                //0,
-                //PLAYFIELD_MIN_Z + row * 2f
                 -PLAYFIELD_MAX_X / 2 + column * COLUMN_SIZE,
                 random.nextInt(6),
                 PLAYFIELD_MIN_Z + row * ROW_SIZE
