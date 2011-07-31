@@ -72,6 +72,8 @@ public class Renderer {
   private Mesh rayMesh;
   /** the background texture **/
   private Texture backgroundTexture;
+  /** the earth texture **/
+  private Texture earthTexture;
   /** the explosion mesh **/
   private Mesh explosionMesh;
   /** the explosion texture **/
@@ -123,11 +125,12 @@ public class Renderer {
       rayMesh = shotMesh;
 
       moonTexture = new Texture(Gdx.files.internal("data/moon.png"), Format.RGB565, true);
+      moonTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       shipTexture = new Texture(Gdx.files.internal("data/battery.png"), Format.RGB565, true);
       shipTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       invaderTexture = new Texture(Gdx.files.internal("data/invader.png"), Format.RGB565, true);
       invaderTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
-      backgroundTexture = new Texture(Gdx.files.internal("data/planet.jpg"), Format.RGB565, true);
+      backgroundTexture = new Texture(Gdx.files.internal("data/starfield512.png"), Format.RGB565, true);
       backgroundTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
       explosionTexture = new Texture(Gdx.files.internal("data/explode.png"), Format.RGBA4444, true);
       explosionTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
@@ -229,7 +232,8 @@ public class Renderer {
   }
 
   private void renderBackground (GL10 gl) {
-    viewMatrix.setToOrtho2D(0, 0, 400, 320);
+    //viewMatrix.setToOrtho2D(0, 0, 400, 320);
+    viewMatrix.setToOrtho2D(0, 0, 480, 320);
     spriteBatch.setProjectionMatrix(viewMatrix);
     spriteBatch.setTransformMatrix(transformMatrix);
     spriteBatch.begin();

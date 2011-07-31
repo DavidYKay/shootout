@@ -33,6 +33,7 @@ public class GameLoop implements Screen, SimulationListener {
 
   private static final boolean FLAT_MODE = false;
 
+  // TODO: Stop fixing these!
   private static final int RESOLUTION_X = 800;
   private static final int RESOLUTION_Y = 480;
 
