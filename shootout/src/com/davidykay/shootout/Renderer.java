@@ -213,7 +213,8 @@ public class Renderer {
     gl.glDisable(GL10.GL_LIGHTING);
 
     //renderShots(gl, simulation.shots);
-    renderRays(gl, simulation.mRays, true);
+    //renderRays(gl, simulation.mRays, true);
+    renderRays(gl, simulation.mAlienRays, true);
     renderRays(gl, simulation.mShipRays, false);
 
     gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -391,10 +392,10 @@ public class Renderer {
 
     for (int i = 0; i < rays.size(); i++) {
       RayShot ray = rays.get(i);
-      if (ray.isInvaderShot != isInvader) {
-        // Skip incorrect ships.
-        continue;
-      }
+      //if (ray.isInvaderShot != isInvader) {
+      //  // Skip incorrect ships.
+      //  continue;
+      //}
       gl.glPushMatrix();
       gl.glTranslatef(ray.position.x, ray.position.y, ray.position.z);
       rayMesh.render(GL10.GL_TRIANGLES);

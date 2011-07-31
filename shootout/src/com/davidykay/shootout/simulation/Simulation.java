@@ -44,8 +44,9 @@ public class Simulation {
   public ArrayList<Explosion> explosions = new ArrayList<Explosion>();
   public Ship ship;
 
-  public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
+  //public ArrayList<RayShot> mRays = new ArrayList<RayShot>();
   public ArrayList<RayShot> mShipRays = new ArrayList<RayShot>();
+  public ArrayList<RayShot> mAlienRays = new ArrayList<RayShot>();
   public transient SimulationListener listener;
   public float multiplier = 1;
   public int score;
@@ -116,15 +117,33 @@ public class Simulation {
 
   private void updateRays (float delta) {
     removedRays.clear();
-    for (int i = 0; i < mRays.size(); i++) {
-      RayShot ray = mRays.get(i);
+
+    ArrayList<RayShot> rays = getAllRays();
+
+    for (RayShot ray : rays) {
       ray.update(delta);
       if (ray.hasLeftField) removedRays.add(ray);
     }
 
-    for (int i = 0; i < removedRays.size(); i++) {
-      RayShot ray = removedRays.get(i);
-      mRays.remove(ray);
+    for (RayShot ray : removedRays) {
+      if (ray.isInvaderShot) {
+        mAlienRays.remove(ray);
+      } else {
+        mShipRays.remove(ray);
+      }
+    }
+
+    // UFOs shoot!
+    if (Math.random() < 0.01 * multiplier && invaders.size() > 0) {
+      int index = (int)(Math.random() * (invaders.size() - 1));
+      Vector3 position = invaders.get(index).position;
+      //Vector3 direction = position.sub(new Vector3(0,0,0)).nor();
+      Vector3 direction = new Vector3(0,0,0).sub(position).nor();
+      RayShot shot = new RayShot(position,
+                                 direction,
+                                 true);
+      mAlienRays.add(shot);
+      if (listener != null) listener.shot();
     }
   }
 
@@ -141,16 +160,17 @@ public class Simulation {
   }
 
   private void checkInvaderCollision () {
-    if ( mRays.isEmpty()) return;
+    //if (mRays.isEmpty()) return;
+    if (mShipRays.isEmpty()) return;
 
     // Brute force collision detection.
 invaders:
     for (int j = 0; j < invaders.size(); j++) {
       Invader invader = invaders.get(j);
 shots:
-      for (RayShot ray : mRays) {
+      for (RayShot ray : mShipRays) {
         if (invader.position.dst(ray.position) < Invader.INVADER_RADIUS) {
-          mRays.remove(ray);
+          mShipRays.remove(ray);
           invaders.remove(invader);
           explosions.add(new Explosion(invader.position));
           if (listener != null) listener.explosion();
@@ -163,8 +183,23 @@ shots:
     }
   }
 
+  /**
+   * See if the player was hit.
+   */
   private void checkShipCollision () {
+    // Check for collision with rays
+    for (RayShot ray : mAlienRays) {
+      if (ray.position.dst(ship.position) < Ship.SHIP_RADIUS) {
+        ship.lives--;
+        mAlienRays.remove(ray);
+        ship.isExploding = true;
+        explosions.add(new Explosion(ship.position));
+        if (listener != null) listener.explosion();
+        break;
+      }
+    }
 
+    // Check for collision with ufos.
     for (int i = 0; i < invaders.size(); i++) {
       Invader invader = invaders.get(i);
       if (invader.position.dst(ship.position) < Ship.SHIP_RADIUS) {
@@ -179,25 +214,26 @@ shots:
     }
   }
 
-  private void checkBlockCollision () {
-    //for (RayShot ray : mRays) {
-    for (int i = 0; i < mRays.size(); i++) {
-      RayShot ray = mRays.get(i);
-      for (int j = 0; j < blocks.size(); j++) {
-        Block block = blocks.get(j);
-        if (block.position.dst(ray.position) < Block.BLOCK_RADIUS) {
-          mRays.remove(ray);
-          blocks.remove(block);
-          break;
-        }
-      }
-    }
-  }
+  //private void checkBlockCollision () {
+  //  //for (RayShot ray : mRays) {
+  //  for (int i = 0; i < mRays.size(); i++) {
+  //    RayShot ray = mRays.get(i);
+  //    for (int j = 0; j < blocks.size(); j++) {
+  //      Block block = blocks.get(j);
+  //      if (block.position.dst(ray.position) < Block.BLOCK_RADIUS) {
+  //        mRays.remove(ray);
+  //        blocks.remove(block);
+  //        break;
+  //      }
+  //    }
+  //  }
+  //}
 
   private void checkNextLevel () {
     if (invaders.size() == 0 && ship.lives > 0) {
       blocks.clear();
-      mRays.clear();
+      //mRays.clear();
+      mAlienRays.clear();
       mShipRays.clear();
       Vector3 shipPosition = ship.position;
       int lives = ship.lives;
@@ -207,6 +243,16 @@ shots:
       multiplier += 0.1f;
       wave++;
     }
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  // Utility
+  //////////////////////////////////////////////////////////////////////
+
+  private ArrayList<RayShot>getAllRays() {
+    ArrayList<RayShot> newList = new ArrayList<RayShot>(mAlienRays);
+    newList.addAll(mShipRays);
+    return newList;
   }
 
   //////////////////////////////////////////////////////////////////////
@@ -246,7 +292,8 @@ shots:
             false
             );
     RayShot rayshot = vanilla;
-    mRays.add(rayshot);
+    //mRays.add(rayshot);
+    mShipRays.add(rayshot);
     if (listener != null) listener.ray();
   }
 
