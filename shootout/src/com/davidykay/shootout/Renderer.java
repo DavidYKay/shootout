@@ -132,7 +132,8 @@ public class Renderer {
 
       //alienTexture = new Texture(Gdx.files.internal("data/alien.png"), Format.RGB565, true);
       alienTexture = new Texture(Gdx.files.internal("data/ufo.png"), Format.RGB565, true);
-      //alienTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      alienTexture.setFilter(TextureFilter.MipMap, TextureFilter.Linear);
+      //alienTexture.setFilter(TextureFilter.MipMap, TextureFilter.MipMap);
       //alienTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
       backgroundTexture = new Texture(Gdx.files.internal("data/starfield512.png"), Format.RGB565, true);
