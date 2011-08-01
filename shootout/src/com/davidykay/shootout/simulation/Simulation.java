@@ -349,7 +349,8 @@ shots:
   //////////////////////////////////////////////////////////////////////
 
   private LinkedList<Orientation> mOrientations = new LinkedList<Orientation>();
-  private static final int MAX_ORIENTATIONS = 15;
+  //private static final int MAX_ORIENTATIONS = 15;
+  private static final int MAX_ORIENTATIONS = 30;
 
   private float mAzimuth;
   private float mPitch  ;
