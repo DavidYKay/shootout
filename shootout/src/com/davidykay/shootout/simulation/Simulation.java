@@ -362,11 +362,13 @@ shots:
     float roll    = 0.0f;
     for (Orientation o : mOrientations) {
       azimuth += o.azimuth;
-      pitch += o.pitch;
-      roll += o.roll;
+      pitch   += o.pitch;
+      roll    += o.roll;
     }
     int count = mOrientations.size();
-    mAzimuth = azimuth / count;
+    // Average out the values.
+    // We can loop around in yaw/azimuth.
+    mAzimuth = (azimuth / count) % 360;
     mPitch   = pitch / count;
     mRoll    = roll / count;
   }
@@ -387,8 +389,12 @@ shots:
     averageOrientationValues();
 
     if (DEBUG) {
-      Gdx.app.log(TAG, String.format("Orientation: (%s)",
+      Gdx.app.log(TAG, String.format("NEW Orientation: %s",
                                      orientation.toString()));
+      Gdx.app.log(TAG, String.format("AVERAGE Orientation: (%f, %f, %f)",
+                                     mRoll,
+                                     mPitch,
+                                     mAzimuth));
     }
   }
 
@@ -400,13 +406,30 @@ shots:
       float pitch   ,
       float roll
       ) {
+    // Adjust the raw values coming in.
+    float adjustedRoll = -roll -90;
+    float adjustedPitch = -pitch;
+
+    // Adjust for the freaky coordinate system.
+    float adjustedAzimuth = -azimuth - 180;
+    float delta = mAzimuth - adjustedAzimuth;
+    float invertedDelta = 360 - delta;
+
+    final float INVERSE_TOLERANCE = 180;
+
+    float massagedAzimuth;
+    if (Math.abs(delta) > INVERSE_TOLERANCE) {
+      // If we're way out of wack, let's just use the inversion.
+      massagedAzimuth = mAzimuth + invertedDelta;
+    } else {
+      massagedAzimuth = adjustedAzimuth;
+    }
+
+    // Massaged values
     Orientation orientation = new Orientation(
-        -azimuth,
-        -roll - 90,
-        -pitch);
-      //mAzimuth = azimuth;
-      //mPitch   = pitch;
-      //mRoll    = roll;
+        massagedAzimuth,
+        adjustedRoll,
+        adjustedPitch);
     addOrientation(orientation);
   }
   public float getAzimuth() {
