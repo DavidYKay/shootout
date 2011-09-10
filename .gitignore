@@ -11,9 +11,14 @@
 # generated GUI files
 *R.java
 
+# Eclipse
+#.project
+#.classpath
 *.pydevproject
-.project
 .metadata
+local.properties
+.settings/
+.loadpath
 bin/**
 tmp/**
 tmp/**/*
@@ -21,10 +26,6 @@ tmp/**/*
 *.bak
 *.swp
 *~.nib
-local.properties
-.classpath
-.settings/
-.loadpath
 
 # CDT-specific
 .cproject
